@@ -4,13 +4,13 @@ import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDCIjxXYh6fJ5TGI4W3mCY4pdeb7klk4b8",
-  authDomain: "gym-tracker-ivnmtz09.firebaseapp.com",
-  projectId: "gym-tracker-ivnmtz09",
-  storageBucket: "gym-tracker-ivnmtz09.firebasestorage.app",
-  messagingSenderId: "469334720153",
-  appId: "1:469334720153:web:5a06eef927ca0eb4ff8208",
-  measurementId: "G-74D742BDD7"
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID
 };
 
 // Initialize Firebase
