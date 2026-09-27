@@ -1,161 +1,91 @@
 import { useState } from 'react';
-import {
-  startOfMonth, endOfMonth, startOfWeek, endOfWeek,
-  eachDayOfInterval, format, isSameMonth, isSameDay, isToday, addMonths, subMonths
-} from 'date-fns';
+import { format, startOfWeek, endOfWeek, eachDayOfInterval, isSameMonth, isSameDay, startOfMonth, endOfMonth, addMonths, subMonths } from 'date-fns';
 import { es } from 'date-fns/locale';
-import { ChevronLeft, ChevronRight, X } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
+
+const INTENSITY_COLORS = {
+  suave: 'bg-green-500',
+  normal: 'bg-blue-500',
+  fuerte: 'bg-orange-500',
+  extremo: 'bg-red-500'
+};
 
 export default function CalendarView({ checkIns }) {
-  const [currentDate, setCurrentDate] = useState(new Date());
-  const [selectedCheckIn, setSelectedCheckIn] = useState(null);
+  const [currentMonth, setCurrentMonth] = useState(new Date());
 
-  const monthStart = startOfMonth(currentDate);
-  const monthEnd = endOfMonth(monthStart);
-  const startDate = startOfWeek(monthStart, { weekStartsOn: 1 });
-  const endDate = endOfWeek(monthEnd, { weekStartsOn: 1 });
+  const onNextMonth = () => setCurrentMonth(addMonths(currentMonth, 1));
+  const onPrevMonth = () => setCurrentMonth(subMonths(currentMonth, 1));
 
+  const startDate = startOfWeek(startOfMonth(currentMonth), { weekStartsOn: 1 });
+  const endDate = endOfWeek(endOfMonth(currentMonth), { weekStartsOn: 1 });
+  
   const days = eachDayOfInterval({ start: startDate, end: endDate });
 
-  const getCheckInForDay = (day) => {
-    return checkIns.find(ci => ci.date && isSameDay(ci.date, day));
+  const getCheckInForDate = (date) => {
+    return checkIns.find(ci => isSameDay(ci.date, date) && ci.attended);
   };
-
-  const getIntensityColor = (intensity) => {
-    switch (intensity) {
-      case 'suave': return 'bg-green-400';
-      case 'normal': return 'bg-primary-500';
-      case 'fuerte': return 'bg-purple-500';
-      case 'extremo': return 'bg-red-600';
-      default: return 'bg-primary-500';
-    }
-  };
-
-  const nextMonth = () => setCurrentDate(addMonths(currentDate, 1));
-  const prevMonth = () => setCurrentDate(subMonths(currentDate, 1));
-
-  const weekDays = ['L', 'M', 'M', 'J', 'V', 'S', 'D'];
 
   return (
-    <div className="bg-white dark:bg-gray-800 p-4 sm:p-6 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 w-full">
-      <div className="flex items-center justify-between mb-4">
-        <h2 className="text-lg font-bold text-gray-900 dark:text-white capitalize">
-          {format(currentDate, 'MMMM yyyy', { locale: es })}
-        </h2>
+    <div className="bg-card p-4 sm:p-6 rounded-2xl border border-border flex flex-col h-full shadow-sm">
+      <div className="flex justify-between items-center mb-6">
+        <h3 className="text-xl font-bold text-foreground capitalize flex items-center gap-2">
+          {format(currentMonth, 'MMMM yyyy', { locale: es })}
+        </h3>
         <div className="flex gap-2">
-          <button onClick={prevMonth} className="p-2 text-gray-500 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-gray-400">
+          <button onClick={onPrevMonth} className="p-2 rounded-xl bg-foreground/5 hover:bg-foreground/10 text-foreground transition-colors">
             <ChevronLeft size={20} />
           </button>
-          <button onClick={nextMonth} className="p-2 text-gray-500 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-gray-400">
+          <button onClick={onNextMonth} className="p-2 rounded-xl bg-foreground/5 hover:bg-foreground/10 text-foreground transition-colors">
             <ChevronRight size={20} />
           </button>
         </div>
       </div>
 
-      <div className="grid grid-cols-7 mb-2 gap-1 sm:gap-2">
-        {weekDays.map((day, i) => (
-          <div key={i} className="text-center font-semibold text-sm text-gray-500 dark:text-gray-400 py-2">
+      <div className="grid grid-cols-7 gap-1 sm:gap-2 mb-2">
+        {['L', 'M', 'M', 'J', 'V', 'S', 'D'].map((day, idx) => (
+          <div key={idx} className="text-center font-bold text-foreground/50 text-xs sm:text-sm py-2">
             {day}
           </div>
         ))}
       </div>
 
-      <div className="grid grid-cols-7 gap-1 sm:gap-2">
-        {days.map((day, i) => {
-          const ci = getCheckInForDay(day);
-          const isCurrentMonth = isSameMonth(day, monthStart);
-          const isDayToday = isToday(day);
+      <div className="grid grid-cols-7 gap-1 sm:gap-2 flex-1">
+        {days.map((day, idx) => {
+          const isCurrentMonth = isSameMonth(day, currentMonth);
+          const isToday = isSameDay(day, new Date());
+          const checkIn = getCheckInForDate(day);
+          
+          let dayClass = "flex flex-col items-center justify-center p-2 rounded-2xl border border-transparent transition-all h-14 sm:h-20 ";
+          
+          if (!isCurrentMonth) {
+            dayClass += "opacity-30 ";
+          }
+
+          if (checkIn) {
+            const intensityColor = INTENSITY_COLORS[checkIn.intensity] || 'bg-accent';
+            dayClass += `${intensityColor} text-white shadow-md transform hover:scale-105 cursor-pointer `;
+          } else if (isToday) {
+            dayClass += "bg-accent/20 text-accent border-accent/50 font-bold ";
+          } else {
+            dayClass += "bg-foreground/5 hover:bg-foreground/10 text-foreground ";
+          }
 
           return (
-            <div 
-              key={i} 
-              onClick={() => ci && setSelectedCheckIn(ci)}
-              className={`aspect-square flex flex-col items-center justify-center rounded-xl border p-1 transition-all cursor-pointer relative ${
-                !isCurrentMonth ? 'opacity-30 border-transparent pointer-events-none' : 
-                isDayToday ? 'border-primary-500 font-bold bg-primary-50 dark:bg-primary-900/20' : 'border-gray-100 dark:border-gray-700 hover:border-primary-300 dark:hover:border-primary-600'
-              } ${ci ? 'bg-gray-50 dark:bg-gray-750' : 'bg-white dark:bg-gray-800'}`}
-            >
-              <span className={`text-sm sm:text-base ${isCurrentMonth ? 'text-gray-900 dark:text-gray-100' : 'text-gray-400'}`}>
-                {format(day, 'd')}
-              </span>
-              
-              {ci && ci.attended && (
-                <div className={`w-2 h-2 sm:w-3 sm:h-3 rounded-full mt-1 sm:mt-2 ${getIntensityColor(ci.intensity)} shadow-sm`} />
-              )}
-              {ci && !ci.attended && (
-                <div className="w-2 h-2 sm:w-3 sm:h-3 rounded-full mt-1 sm:mt-2 bg-gray-300 dark:bg-gray-600" />
+            <div key={idx} className={dayClass} title={checkIn ? `Intensidad: ${checkIn.intensity}` : ''}>
+              <span className="text-sm sm:text-lg font-semibold">{format(day, 'd')}</span>
+              {checkIn && (
+                <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-white/80 mt-1 shadow-sm"></span>
               )}
             </div>
           );
         })}
       </div>
 
-      {selectedCheckIn && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900/50 backdrop-blur-sm p-4">
-          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl w-full max-w-sm p-6 border border-gray-200 dark:border-gray-700 relative animate-in zoom-in-95 duration-200">
-            <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-1">
-              Detalle del Día
-            </h3>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mb-4 capitalize">
-              {format(selectedCheckIn.date, 'EEEE d, MMMM yyyy', { locale: es })}
-            </p>
-
-            {selectedCheckIn.attended ? (
-              <div className="space-y-3">
-                <div className="flex justify-between items-center py-2 border-b border-gray-100 dark:border-gray-700">
-                  <span className="text-sm font-medium text-gray-500 dark:text-gray-400">Intensidad</span>
-                  <span className="text-sm font-bold text-gray-900 dark:text-white capitalize px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded-md">
-                    {selectedCheckIn.intensity || 'Normal'}
-                  </span>
-                </div>
-                <div className="flex justify-between items-center py-2 border-b border-gray-100 dark:border-gray-700">
-                  <span className="text-sm font-medium text-gray-500 dark:text-gray-400">Hora</span>
-                  <span className="text-sm font-bold text-gray-900 dark:text-white">
-                    {selectedCheckIn.time || 'N/A'}
-                  </span>
-                </div>
-                {selectedCheckIn.currentWeight && (
-                  <div className="flex justify-between items-center py-2 border-b border-gray-100 dark:border-gray-700">
-                    <span className="text-sm font-medium text-gray-500 dark:text-gray-400">Peso</span>
-                    <span className="text-sm font-bold text-gray-900 dark:text-white">
-                      {selectedCheckIn.currentWeight} kg
-                    </span>
-                  </div>
-                )}
-                {selectedCheckIn.notes && (
-                  <div className="pt-2">
-                    <span className="text-sm font-medium text-gray-500 dark:text-gray-400 block mb-1">Notas</span>
-                    <p className="text-sm text-gray-800 dark:text-gray-300 bg-gray-50 dark:bg-gray-900 p-3 rounded-lg">
-                      {selectedCheckIn.notes}
-                    </p>
-                  </div>
-                )}
-              </div>
-            ) : (
-              <div className="py-4 text-center">
-                <span className="inline-block p-3 rounded-full bg-red-100 text-red-600 mb-2">
-                  <X size={24} />
-                </span>
-                <p className="font-semibold text-gray-900 dark:text-white">Día de no asistencia</p>
-              </div>
-            )}
-
-            <button 
-              onClick={() => setSelectedCheckIn(null)}
-              className="mt-6 w-full text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800"
-            >
-              Cerrar
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* Leyenda */}
-      <div className="mt-6 pt-4 border-t border-gray-100 dark:border-gray-700 flex flex-wrap gap-4 text-xs font-medium text-gray-500 dark:text-gray-400 justify-center">
-        <div className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 rounded-full bg-green-400" /> Suave</div>
-        <div className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 rounded-full bg-primary-500" /> Normal</div>
-        <div className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 rounded-full bg-purple-500" /> Fuerte</div>
-        <div className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 rounded-full bg-red-600" /> Extremo</div>
+      <div className="mt-6 flex flex-wrap justify-center gap-4 text-xs font-medium text-foreground/60 border-t border-border pt-4">
+        <div className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-full bg-green-500"></span> Suave</div>
+        <div className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-full bg-blue-500"></span> Normal</div>
+        <div className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-full bg-orange-500"></span> Fuerte</div>
+        <div className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-full bg-red-500"></span> Extremo</div>
       </div>
     </div>
   );

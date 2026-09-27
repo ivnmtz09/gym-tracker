@@ -28,22 +28,22 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex flex-col justify-center items-center p-4 relative overflow-hidden transition-colors duration-300">
+    <div className="min-h-screen bg-transparent flex flex-col justify-center items-center p-4 relative overflow-hidden transition-colors duration-300">
       
       {/* Decorative Background Elements */}
       <div className="absolute top-[-10%] left-[-10%] w-96 h-96 bg-primary-500/20 rounded-full blur-[100px] pointer-events-none" />
       <div className="absolute bottom-[-10%] right-[-10%] w-96 h-96 bg-purple-500/20 rounded-full blur-[100px] pointer-events-none" />
 
-      <div className="w-full max-w-md bg-white/70 dark:bg-gray-800/70 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/20 dark:border-gray-700/50 p-8 sm:p-10 relative z-10 animate-in zoom-in-95 duration-500">
+      <div className="w-full max-w-md glass-card rounded-3xl shadow-2xl border border-white/20 dark:border-gray-700/50 p-8 sm:p-10 relative z-10 animate-in zoom-in-95 duration-500">
         
         <div className="flex flex-col items-center justify-center mb-8">
           <div className="mb-4">
             <Mascot size={130} className="hover:scale-110 transition-transform duration-300 drop-shadow-xl" />
           </div>
-          <h1 className="text-4xl font-extrabold tracking-tight text-gray-900 dark:text-white mb-2">
+          <h1 className="text-4xl font-extrabold tracking-tight text-foreground  mb-2">
             Forge<span className="text-primary-600 dark:text-primary-400">Fit</span>
           </h1>
-          <p className="text-center text-gray-500 dark:text-gray-400 text-sm font-medium">
+          <p className="text-center text-foreground/60  text-sm font-medium">
             Forja tu mejor versión, día tras día.
           </p>
         </div>
@@ -67,7 +67,7 @@ export default function Login() {
               className="w-5 h-5 border border-gray-300 rounded-md bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800 transition-all text-primary-600" 
             />
           </div>
-          <label htmlFor="terms" className="text-sm font-medium text-gray-600 dark:text-gray-300">
+          <label htmlFor="terms" className="text-sm font-medium text-foreground/80 ">
             Acepto los <a href="#" className="text-primary-600 dark:text-primary-400 hover:underline font-bold">Términos y Condiciones</a> y la Política de Privacidad de ForgeFit.
           </label>
         </div>
@@ -75,7 +75,7 @@ export default function Login() {
         <button
           onClick={handleGoogleLogin}
           disabled={loading || !termsAccepted}
-          className="w-full flex items-center justify-center gap-3 bg-white dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-600 text-gray-700 dark:text-white p-4 rounded-xl font-bold hover:bg-gray-50 dark:hover:bg-gray-600 hover:border-gray-300 dark:hover:border-gray-500 shadow-sm transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed group focus:outline-none focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700"
+          className="w-full flex items-center justify-center gap-3 bg-card border-2 border-border text-foreground  p-4 rounded-xl font-bold hover:bg-gray-50 dark:hover:bg-gray-600 hover:border-gray-300 dark:hover:border-gray-500 shadow-sm transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed group focus:outline-none focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700"
         >
           {loading ? (
             <div className="w-6 h-6 border-2 border-gray-300 border-t-primary-600 rounded-full animate-spin" />
@@ -94,7 +94,7 @@ export default function Login() {
 
       </div>
       
-      <p className="mt-8 text-sm text-gray-400 dark:text-gray-500 text-center font-medium">
+      <p className="mt-8 text-sm text-gray-400 dark:text-foreground/60 text-center font-medium">
         &copy; {new Date().getFullYear()} ForgeFit. Todos los derechos reservados.
       </p>
     </div>

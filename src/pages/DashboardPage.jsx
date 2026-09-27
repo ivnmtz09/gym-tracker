@@ -57,22 +57,22 @@ export default function DashboardPage({ user, profile }) {
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <header className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
         <div>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900 dark:text-white tracking-tight">
-            Hola, <span className="text-primary-600 dark:text-primary-500">{capitalizedName}</span>
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-foreground tracking-tight">
+            Hola, <span className="text-accent">{capitalizedName}</span>
           </h2>
-          <p className="text-gray-500 dark:text-gray-400 mt-2 text-lg font-medium">
-            Programa: <strong className="text-gray-900 dark:text-gray-200">{programName}</strong>
+          <p className="text-foreground/70 mt-2 text-lg font-medium">
+            Programa: <strong className="text-foreground">{programName}</strong>
           </p>
         </div>
         
         {profile?.initialImc && (
-          <div className="glass-card px-4 py-3 rounded-2xl shadow-sm border border-white/20 dark:border-gray-700/30 flex items-center gap-3">
-            <div className="bg-green-100 dark:bg-green-900/30 p-2 rounded-xl text-green-600 dark:text-green-400">
+          <div className="glass-card px-4 py-3 flex items-center gap-3">
+            <div className="bg-green-500/20 p-2 rounded-xl text-green-500">
               <Activity size={20} />
             </div>
             <div>
-              <p className="text-xs font-bold text-gray-400 uppercase tracking-wider">Tu IMC</p>
-              <p className="text-lg font-bold text-gray-900 dark:text-white">{profile.initialImc}</p>
+              <p className="text-xs font-bold text-foreground/50 uppercase tracking-wider">Tu IMC</p>
+              <p className="text-lg font-bold text-foreground">{profile.initialImc}</p>
             </div>
           </div>
         )}
@@ -80,35 +80,35 @@ export default function DashboardPage({ user, profile }) {
 
       <div className="grid lg:grid-cols-5 gap-6">
         <div className="lg:col-span-2 flex flex-col space-y-6">
-          <div className="glass-card p-6 sm:p-8 rounded-3xl shadow-sm border border-white/20 dark:border-gray-700/30 flex-1 relative overflow-hidden group">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-primary-500/10 dark:bg-primary-900/20 rounded-full blur-3xl -mr-8 -mt-8 pointer-events-none" />
+          <div className="glass-card p-6 sm:p-8 flex-1 relative overflow-hidden group">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-accent/10 rounded-full blur-3xl -mr-8 -mt-8 pointer-events-none" />
             
             <div className="relative z-10 flex flex-col h-full">
               <div className="flex items-center gap-3 mb-6">
-                <div className={`p-3 rounded-2xl shadow-inner ${isRestDay ? 'bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400' : 'bg-primary-100 text-primary-600 dark:bg-primary-900/30 dark:text-primary-400'}`}>
+                <div className={`p-3 rounded-2xl shadow-inner ${isRestDay ? 'bg-green-500/20 text-green-500' : 'bg-accent/20 text-accent'}`}>
                   {isRestDay ? <Flame size={24} /> : <Calendar size={24} />}
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 dark:text-white">Plan de Hoy</h3>
+                <h3 className="text-xl font-bold text-foreground">Plan de Hoy</h3>
               </div>
 
-              <div className="bg-white/40 dark:bg-gray-900/40 backdrop-blur-md p-5 rounded-2xl border border-white/40 dark:border-gray-700/50 mb-6 flex flex-col xl:flex-row justify-between items-center gap-4 shadow-sm">
+              <div className="bg-foreground/5 p-5 rounded-2xl border border-border mb-6 flex flex-col xl:flex-row justify-between items-center gap-4 shadow-sm">
                 <div className="flex-1 w-full">
-                  <p className="text-sm font-semibold tracking-wider text-gray-500 dark:text-gray-400 uppercase mb-2">
+                  <p className="text-sm font-semibold tracking-wider text-foreground/50 uppercase mb-2">
                     {new Date().toLocaleDateString('es-ES', { weekday: 'long' })}
                   </p>
-                  <p className="text-2xl font-bold text-gray-900 dark:text-white mb-1">{todaysRoutine.name}</p>
-                  <p className="text-gray-600 dark:text-gray-300 font-medium mb-4">{todaysRoutine.desc}</p>
+                  <p className="text-2xl font-bold text-foreground mb-1">{todaysRoutine.name}</p>
+                  <p className="text-foreground/70 font-medium mb-4">{todaysRoutine.desc}</p>
                   
                   {!isRestDay && (
-                    <div className="inline-flex items-center gap-2 bg-white/50 dark:bg-gray-800/50 px-3 py-1.5 rounded-xl border border-white/40 dark:border-gray-600/50 text-sm font-semibold text-gray-600 dark:text-gray-300 shadow-sm backdrop-blur-sm">
-                      <Clock size={16} className="text-primary-600 dark:text-primary-400" />
+                    <div className="inline-flex items-center gap-2 bg-background/50 px-3 py-1.5 rounded-xl border border-border text-sm font-semibold text-foreground/70">
+                      <Clock size={16} className="text-accent" />
                       <span>~60 min</span>
                     </div>
                   )}
                 </div>
 
                 {!isRestDay && (
-                  <div className="w-28 h-28 bg-white/50 dark:bg-gray-800/50 rounded-2xl border border-white/50 dark:border-gray-600/50 flex-shrink-0 flex items-center justify-center shadow-inner p-1 backdrop-blur-sm">
+                  <div className="w-28 h-28 bg-background/50 rounded-2xl border border-border flex-shrink-0 flex items-center justify-center shadow-inner p-1">
                     <MuscleMap routineDesc={todaysRoutine.desc} />
                   </div>
                 )}
@@ -117,9 +117,9 @@ export default function DashboardPage({ user, profile }) {
               <div className="mt-auto">
                 <button 
                   onClick={() => setShowCheckIn(!showCheckIn)}
-                  className={`w-full flex items-center justify-center gap-2 px-5 py-4 rounded-2xl font-bold text-white transition-all focus:ring-4 focus:outline-none shadow-lg hover:-translate-y-0.5 active:translate-y-0 ${
+                  className={`w-full flex items-center justify-center gap-2 px-5 py-4 rounded-2xl font-bold transition-all focus:ring-4 focus:outline-none shadow-lg hover:-translate-y-0.5 active:translate-y-0 ${
                     showCheckIn 
-                      ? 'bg-gray-800 hover:bg-gray-900 focus:ring-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700 shadow-gray-900/20' 
+                      ? 'bg-foreground/10 text-foreground hover:bg-foreground/20' 
                       : 'btn-accent'
                   }`}
                 >
@@ -131,13 +131,13 @@ export default function DashboardPage({ user, profile }) {
           </div>
 
           {todayCheckIns.length > 0 && !showCheckIn && (
-            <div className="glass-card p-6 rounded-3xl shadow-sm border border-white/20 dark:border-gray-700/30">
-              <h4 className="text-lg font-bold text-gray-900 dark:text-white mb-4">Registros de hoy</h4>
+            <div className="glass-card p-6">
+              <h4 className="text-lg font-bold text-foreground mb-4">Registros de hoy</h4>
               <div className="space-y-3">
                 {todayCheckIns.map(ci => (
-                  <div key={ci.id} className="bg-white/40 dark:bg-gray-900/40 p-4 rounded-2xl border border-white/40 dark:border-gray-700/50 flex justify-between items-center group backdrop-blur-md shadow-sm">
+                  <div key={ci.id} className="bg-foreground/5 p-4 rounded-2xl border border-border flex justify-between items-center group">
                     <div>
-                      <p className="font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+                      <p className="font-semibold text-foreground flex items-center gap-2">
                         {ci.attended ? (
                           <span className="flex w-2.5 h-2.5 bg-green-500 rounded-full shadow-[0_0_8px_rgba(34,197,94,0.6)]" />
                         ) : (
@@ -146,14 +146,14 @@ export default function DashboardPage({ user, profile }) {
                         {ci.attended ? 'Asistencia' : 'No asistió'} a las {ci.time || 'N/A'}
                       </p>
                       {ci.intensity && (
-                        <p className="text-xs font-medium text-gray-500 dark:text-gray-400 mt-1 capitalize">
+                        <p className="text-xs font-medium text-foreground/50 mt-1 capitalize">
                           Intensidad: {ci.intensity}
                         </p>
                       )}
                     </div>
                     <button 
                       onClick={() => handleDelete(ci.id)}
-                      className="p-2 text-red-500 hover:text-red-700 hover:bg-red-50/50 dark:hover:bg-gray-800/50 rounded-xl transition-colors opacity-0 group-hover:opacity-100 focus:outline-none focus:ring-4 focus:ring-red-300 dark:focus:ring-red-800"
+                      className="p-2 text-red-500 hover:text-red-600 hover:bg-red-500/10 rounded-xl transition-colors opacity-0 group-hover:opacity-100"
                       title="Eliminar registro"
                     >
                       <Trash2 size={18} />
@@ -167,7 +167,7 @@ export default function DashboardPage({ user, profile }) {
 
         <div className="lg:col-span-3 flex flex-col">
           {showCheckIn ? (
-            <div className="glass-card p-6 sm:p-8 rounded-3xl shadow-sm border border-white/20 dark:border-gray-700/30 h-full animate-in slide-in-from-right-8 duration-300">
+            <div className="glass-card p-6 sm:p-8 h-full animate-in slide-in-from-right-8 duration-300">
               <CheckInForm 
                 user={user} 
                 onSuccess={handleCheckInSuccess} 
@@ -175,16 +175,16 @@ export default function DashboardPage({ user, profile }) {
               />
             </div>
           ) : (
-            <div className="glass-card p-6 sm:p-8 rounded-3xl shadow-sm border border-white/20 dark:border-gray-700/30 h-full flex flex-col">
-              <div className="text-sm font-medium text-center text-gray-500 border-b border-gray-200/50 dark:text-gray-400 dark:border-gray-700/50 mb-6">
+            <div className="glass-card p-6 sm:p-8 h-full flex flex-col">
+              <div className="text-sm font-medium text-center text-foreground/50 border-b border-border mb-6">
                 <ul className="flex flex-wrap -mb-px">
                   <li className="mr-2">
                     <button 
                       onClick={() => setActiveTab('stats')}
                       className={`inline-flex items-center gap-2 p-4 border-b-2 rounded-t-xl transition-colors ${
                         activeTab === 'stats' 
-                          ? 'text-primary-600 border-primary-600 active dark:text-primary-400 dark:border-primary-400' 
-                          : 'border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300'
+                          ? 'text-accent border-accent' 
+                          : 'border-transparent hover:text-foreground/80 hover:border-border'
                       }`}
                     >
                       <LayoutDashboard size={18} /> Estadísticas
@@ -195,8 +195,8 @@ export default function DashboardPage({ user, profile }) {
                       onClick={() => setActiveTab('calendar')}
                       className={`inline-flex items-center gap-2 p-4 border-b-2 rounded-t-xl transition-colors ${
                         activeTab === 'calendar' 
-                          ? 'text-primary-600 border-primary-600 active dark:text-primary-400 dark:border-primary-400' 
-                          : 'border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300'
+                          ? 'text-accent border-accent' 
+                          : 'border-transparent hover:text-foreground/80 hover:border-border'
                       }`}
                     >
                       <CalendarDays size={18} /> Calendario

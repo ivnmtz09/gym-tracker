@@ -4,7 +4,7 @@ const ThemeContext = createContext();
 
 export const ThemeProvider = ({ children }) => {
   const [visualMode, setVisualMode] = useState(() => {
-    return localStorage.getItem('visualMode') || 'oscuro';
+    return localStorage.getItem('visualMode') || 'dark';
   });
   const [accentTheme, setAccentTheme] = useState(() => {
     return localStorage.getItem('accentTheme') || 'azul';

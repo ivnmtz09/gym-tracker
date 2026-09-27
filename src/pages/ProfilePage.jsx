@@ -34,9 +34,9 @@ export default function ProfilePage({ user, profile }) {
   ];
 
   const modes = [
-    { id: 'claro', label: 'Claro', icon: Sun },
-    { id: 'oscuro', label: 'Oscuro', icon: Moon },
-    { id: 'nocturno', label: 'Nocturno', icon: Monitor },
+    { id: 'light', label: 'Claro', icon: Sun },
+    { id: 'dark', label: 'Oscuro', icon: Moon },
+    { id: 'midnight', label: 'Nocturno', icon: Monitor },
   ];
 
   const handleLogout = () => {
