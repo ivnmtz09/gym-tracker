@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import { getAuth, signInWithPopup, GoogleAuthProvider, signOut } from 'firebase/auth';
 import { Dumbbell } from 'lucide-react';
 
-const ALLOWED_EMAILS = ['ivanjmm01@gmail.com', 'sau.duta.1.1@gmail.com'];
-
 export default function Login() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -14,14 +12,7 @@ export default function Login() {
     setError('');
     setLoading(true);
     try {
-      const result = await signInWithPopup(auth, provider);
-      const user = result.user;
-
-      // Validación estricta de correos permitidos
-      if (!ALLOWED_EMAILS.includes(user.email)) {
-        await signOut(auth);
-        setError('Acceso denegado. Esta cuenta no está autorizada para acceder al tracker.');
-      }
+      await signInWithPopup(auth, provider);
     } catch (err) {
       console.error(err);
       setError('Hubo un error al iniciar sesión con Google.');

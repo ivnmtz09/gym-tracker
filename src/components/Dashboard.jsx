@@ -1,33 +1,30 @@
 import { useState } from 'react';
 import CheckInForm from './CheckInForm';
 import Stats from './Stats';
-import { Calendar, Clock, CheckCircle, Flame } from 'lucide-react';
+import { Calendar, Clock, CheckCircle, Flame, Activity } from 'lucide-react';
+import { ROUTINES, PROGRAM_TYPES } from '../data/routines';
 
-const routineMap = {
-  1: { day: 'Lunes', name: "Día 1: Push", desc: "Pecho, Hombro, Tríceps", time: "08:00 a.m. - 10:00 a.m." },
-  2: { day: 'Martes', name: "Día 2: Pull", desc: "Espalda, Bíceps", time: "07:00 p.m. - 09:00 p.m." },
-  3: { day: 'Miércoles', name: "Día 3: Legs", desc: "Piernas, Abdomen", time: "07:45 p.m. - 09:45 p.m." },
-  4: { day: 'Jueves', name: "Día 4: Push", desc: "Pecho, Hombro, Tríceps", time: "07:00 p.m. - 09:00 p.m." },
-  5: { day: 'Viernes', name: "Día 5: Pull", desc: "Espalda, Bíceps", time: "03:00 p.m. - 05:00 p.m." },
-  6: { day: 'Sábado', name: "Día 6: Legs", desc: "Piernas, Abdomen", time: "07:30 a.m. - 09:30 a.m." },
-  0: { day: 'Domingo', name: "Descanso Activo", desc: "Libre", time: "Libre" }
-};
-
-export default function Dashboard({ user }) {
+export default function Dashboard({ user, profile }) {
   const [showCheckIn, setShowCheckIn] = useState(false);
   const [refreshStats, setRefreshStats] = useState(0);
 
   const todayIndex = new Date().getDay();
-  const todaysRoutine = routineMap[todayIndex];
-  const isRestDay = todayIndex === 0;
+  
+  // Lógica dinámica de rutinas
+  const programId = profile?.programId || 'ppl';
+  const routineMap = ROUTINES[programId] || ROUTINES['default'];
+  const todaysRoutine = routineMap[todayIndex] || routineMap['default'];
+  const programName = PROGRAM_TYPES[programId] || "Programa General";
+  
+  const isRestDay = todayIndex === 0 || todaysRoutine.type === 'rest';
 
   const handleCheckInSuccess = () => {
     setShowCheckIn(false);
     setRefreshStats(prev => prev + 1);
   };
 
-  const userName = user.email.split('@')[0];
-  const capitalizedName = userName.charAt(0).toUpperCase() + userName.slice(1);
+  const displayName = profile?.displayName || user.email.split('@')[0];
+  const capitalizedName = displayName.charAt(0).toUpperCase() + displayName.slice(1);
 
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
@@ -36,16 +33,28 @@ export default function Dashboard({ user }) {
           <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-800 tracking-tight">
             ¡Hola, <span className="text-blue-600">{capitalizedName}</span>! 👋
           </h2>
-          <p className="text-slate-500 mt-2 text-lg">Es hora de romper tus límites hoy.</p>
+          <p className="text-slate-500 mt-2 text-lg">
+            Programa actual: <strong className="text-slate-700">{programName}</strong>
+          </p>
         </div>
+        
+        {/* Widget de Salud Inicial */}
+        {profile?.initialImc && (
+          <div className="bg-white px-4 py-2 rounded-xl shadow-sm border border-slate-100 flex items-center gap-3">
+            <div className="bg-emerald-100 p-2 rounded-lg text-emerald-600">
+              <Activity size={20} />
+            </div>
+            <div>
+              <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Tu IMC</p>
+              <p className="text-lg font-bold text-slate-800">{profile.initialImc}</p>
+            </div>
+          </div>
+        )}
       </header>
 
       <div className="grid lg:grid-cols-5 gap-6">
-        {/* Tarjeta de Rutina (Ocupa 2 columnas en lg) */}
         <div className="lg:col-span-2 flex flex-col">
           <div className="bg-white p-6 sm:p-8 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 flex-1 relative overflow-hidden group">
-            
-            {/* Decoración de fondo */}
             <div className="absolute top-0 right-0 -mr-8 -mt-8 w-32 h-32 rounded-full bg-gradient-to-br from-blue-50 to-indigo-50 opacity-50 group-hover:scale-110 transition-transform duration-500" />
             
             <div className="relative z-10">
@@ -58,15 +67,19 @@ export default function Dashboard({ user }) {
 
               <div className="bg-slate-50 p-5 rounded-2xl border border-slate-100 mb-8 transition-colors hover:bg-slate-100/50">
                 <div className="flex justify-between items-start mb-2">
-                  <p className="text-sm font-semibold tracking-wider text-slate-400 uppercase">{todaysRoutine.day}</p>
+                  <p className="text-sm font-semibold tracking-wider text-slate-400 uppercase">
+                    {new Date().toLocaleDateString('es-ES', { weekday: 'long' })}
+                  </p>
                 </div>
                 <p className="text-2xl font-bold text-slate-800 mb-1">{todaysRoutine.name}</p>
                 <p className="text-slate-600 font-medium mb-4">{todaysRoutine.desc}</p>
                 
-                <div className="inline-flex items-center gap-2 bg-white px-3 py-1.5 rounded-lg border border-slate-200 text-sm font-semibold text-slate-600 shadow-sm">
-                  <Clock size={16} className="text-blue-500" />
-                  <span>{todaysRoutine.time}</span>
-                </div>
+                {!isRestDay && (
+                  <div className="inline-flex items-center gap-2 bg-white px-3 py-1.5 rounded-lg border border-slate-200 text-sm font-semibold text-slate-600 shadow-sm">
+                    <Clock size={16} className="text-blue-500" />
+                    <span>~60 min</span>
+                  </div>
+                )}
               </div>
               
               <button 
@@ -84,7 +97,6 @@ export default function Dashboard({ user }) {
           </div>
         </div>
 
-        {/* Área interactiva: Formulario o Stats rápidos (Ocupa 3 columnas) */}
         <div className="lg:col-span-3">
           {showCheckIn ? (
             <div className="bg-white p-6 sm:p-8 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 h-full animate-in slide-in-from-right-8 duration-300">

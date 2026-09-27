@@ -2,17 +2,27 @@ import { useState, useEffect } from 'react';
 import { auth } from './firebase';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { getUserProfile } from './services/db';
 import Login from './components/Login';
 import Dashboard from './components/Dashboard';
+import Onboarding from './components/Onboarding';
 import { Dumbbell, LogOut } from 'lucide-react';
 
 function App() {
   const [user, setUser] = useState(null);
+  const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       setUser(currentUser);
+      if (currentUser) {
+        // Fetch user profile from firestore
+        const userProfile = await getUserProfile(currentUser.uid);
+        setProfile(userProfile);
+      } else {
+        setProfile(null);
+      }
       setLoading(false);
     });
     return () => unsubscribe();
@@ -46,7 +56,7 @@ function App() {
                 </div>
                 <div className="flex items-center gap-4">
                   <span className="hidden sm:block text-sm font-medium text-slate-600 bg-slate-100 px-3 py-1 rounded-full">
-                    {user.email.split('@')[0]}
+                    {profile?.displayName || user.email.split('@')[0]}
                   </span>
                   <button 
                     onClick={() => signOut(auth)}
@@ -64,7 +74,14 @@ function App() {
         <main className="flex-1 w-full max-w-5xl mx-auto p-4 sm:p-6 lg:p-8">
           <Routes>
             <Route path="/login" element={!user ? <Login /> : <Navigate to="/" />} />
-            <Route path="/" element={user ? <Dashboard user={user} /> : <Navigate to="/login" />} />
+            <Route 
+              path="/" 
+              element={
+                !user ? <Navigate to="/login" /> : 
+                !profile ? <Onboarding user={user} onComplete={setProfile} /> : 
+                <Dashboard user={user} profile={profile} />
+              } 
+            />
           </Routes>
         </main>
       </div>
