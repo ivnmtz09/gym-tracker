@@ -1,25 +1,42 @@
 import React, { useState } from 'react';
 import { Palette, Moon, Sun, Monitor, LogOut } from 'lucide-react';
 import { getAuth, signOut } from 'firebase/auth';
+import { useTheme } from '../contexts/ThemeContext';
+import { saveUserProfile } from '../services/db';
 
-export default function ProfilePage({ user, profile, onProfileUpdate, currentTheme, onThemeChange, currentMode, onModeChange }) {
+export default function ProfilePage({ user, profile }) {
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
+  const { visualMode, setVisualMode, accentTheme, setAccentTheme } = useTheme();
+
+  const handleThemeChange = async (color) => {
+    setAccentTheme(color);
+    if (user && profile) {
+      await saveUserProfile(user.uid, { ...profile, accentTheme: color });
+    }
+  };
+
+  const handleModeChange = async (mode) => {
+    setVisualMode(mode);
+    if (user && profile) {
+      await saveUserProfile(user.uid, { ...profile, visualMode: mode });
+    }
+  };
 
   const colors = [
-    { id: 'blue', label: 'Azul', bg: 'bg-blue-500', ring: 'ring-blue-500' },
-    { id: 'pink', label: 'Rosa', bg: 'bg-pink-500', ring: 'ring-pink-500' },
-    { id: 'emerald', label: 'Esmeralda', bg: 'bg-emerald-500', ring: 'ring-emerald-500' },
-    { id: 'violet', label: 'Violeta', bg: 'bg-violet-500', ring: 'ring-violet-500' },
-    { id: 'orange', label: 'Naranja', bg: 'bg-orange-500', ring: 'ring-orange-500' },
-    { id: 'red', label: 'Rojo', bg: 'bg-red-500', ring: 'ring-red-500' },
-    { id: 'yellow', label: 'Amarillo', bg: 'bg-yellow-500', ring: 'ring-yellow-500' },
-    { id: 'cyan', label: 'Cian', bg: 'bg-cyan-500', ring: 'ring-cyan-500' },
+    { id: 'azul', label: 'Azul', bg: 'bg-blue-500', hex: '#3b82f6' },
+    { id: 'rosa', label: 'Rosa', bg: 'bg-pink-500', hex: '#ec4899' },
+    { id: 'verde', label: 'Verde', bg: 'bg-emerald-500', hex: '#10b981' },
+    { id: 'morado', label: 'Morado', bg: 'bg-violet-500', hex: '#8b5cf6' },
+    { id: 'naranja', label: 'Naranja', bg: 'bg-orange-500', hex: '#f97316' },
+    { id: 'rojo', label: 'Rojo', bg: 'bg-red-500', hex: '#ef4444' },
+    { id: 'amarillo', label: 'Amarillo', bg: 'bg-yellow-500', hex: '#eab308' },
+    { id: 'cian', label: 'Cian', bg: 'bg-cyan-500', hex: '#06b6d4' },
   ];
 
   const modes = [
-    { id: 'light', label: 'Claro', icon: Sun, bg: 'bg-gray-100 text-gray-800' },
-    { id: 'dark', label: 'Oscuro', icon: Moon, bg: 'bg-gray-800 text-gray-200' },
-    { id: 'night', label: 'Nocturno', icon: Monitor, bg: 'bg-blue-950 text-blue-200' },
+    { id: 'claro', label: 'Claro', icon: Sun },
+    { id: 'oscuro', label: 'Oscuro', icon: Moon },
+    { id: 'nocturno', label: 'Nocturno', icon: Monitor },
   ];
 
   const handleLogout = () => {
@@ -27,46 +44,49 @@ export default function ProfilePage({ user, profile, onProfileUpdate, currentThe
     signOut(auth);
   };
 
-  const displayName = profile?.displayName || user?.email?.split('@')[0];
+  const displayName = profile?.displayName || user?.email?.split('@')[0] || "Usuario";
 
   return (
-    <div className="max-w-3xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4">
+    <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4">
       <header>
-        <h2 className="text-3xl font-extrabold text-gray-900 dark:text-white tracking-tight">Tu Perfil</h2>
-        <p className="text-gray-500 dark:text-gray-400 mt-2 text-lg">Personaliza tu experiencia en ForgeFit.</p>
+        <h2 className="text-3xl font-extrabold tracking-tight">Tu Perfil</h2>
+        <p className="text-[var(--text-muted)] mt-1">Configuración y apariencia.</p>
       </header>
 
-      <div className="bg-white/60 dark:bg-gray-800/60 backdrop-blur-xl p-6 sm:p-8 rounded-3xl shadow-sm border border-white/20 dark:border-gray-700/30">
-        <div className="flex items-center gap-6 mb-8">
-          <div className="w-20 h-20 bg-gradient-to-tr from-primary-600 to-primary-400 rounded-full flex items-center justify-center text-white text-3xl font-bold shadow-lg shadow-primary-500/30">
-            {displayName?.charAt(0).toUpperCase()}
+      <div className="glass-card p-6 sm:p-8">
+        <div className="flex items-center gap-5 mb-8">
+          <div className="w-16 h-16 rounded-full flex items-center justify-center text-white text-2xl font-bold btn-accent">
+            {displayName.charAt(0).toUpperCase()}
           </div>
           <div>
-            <h3 className="text-2xl font-bold text-gray-900 dark:text-white">{displayName}</h3>
-            <p className="text-gray-500 dark:text-gray-400 font-medium">{user?.email}</p>
+            <h3 className="text-2xl font-bold">{displayName}</h3>
+            <p className="text-[var(--text-muted)] font-medium">{user?.email}</p>
           </div>
         </div>
 
         <div className="space-y-10">
           {/* Apariencia: Modo */}
           <div>
-            <h4 className="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-              <Monitor className="text-primary-500" /> Modo de Visualización
+            <h4 className="text-lg font-bold mb-4 flex items-center gap-2">
+              <Monitor className="text-[var(--accent-base)]" /> Modo de Visualización
             </h4>
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-3 gap-3">
               {modes.map(mode => {
                 const Icon = mode.icon;
-                const isActive = currentMode === mode.id;
+                const isActive = visualMode === mode.id;
                 return (
                   <button
                     key={mode.id}
-                    onClick={() => onModeChange(mode.id)}
-                    className={`flex flex-col items-center justify-center gap-3 p-4 rounded-2xl border-2 transition-all ${isActive ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20 shadow-md' : 'border-transparent bg-white/50 dark:bg-gray-700/50 hover:bg-gray-50 dark:hover:bg-gray-600'}`}
+                    onClick={() => handleModeChange(mode.id)}
+                    className="flex flex-col items-center justify-center gap-3 p-4 rounded-2xl border-2 transition-all bg-[var(--bg-base)]"
+                    style={{ borderColor: isActive ? 'var(--accent-base)' : 'transparent' }}
                   >
-                    <div className={`p-3 rounded-full ${mode.bg}`}>
-                      <Icon size={24} />
+                    <div className="p-2 rounded-full bg-[var(--bg-surface)] border border-[var(--border-subtle)]">
+                      <Icon size={24} style={{ color: isActive ? 'var(--accent-base)' : 'var(--text-muted)' }} />
                     </div>
-                    <span className={`font-bold ${isActive ? 'text-primary-700 dark:text-primary-400' : 'text-gray-600 dark:text-gray-300'}`}>{mode.label}</span>
+                    <span className="font-bold text-sm" style={{ color: isActive ? 'var(--text-main)' : 'var(--text-muted)' }}>
+                      {mode.label}
+                    </span>
                   </button>
                 );
               })}
@@ -75,20 +95,27 @@ export default function ProfilePage({ user, profile, onProfileUpdate, currentThe
 
           {/* Apariencia: Color */}
           <div>
-            <h4 className="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-              <Palette className="text-primary-500" /> Tema de Acento
+            <h4 className="text-lg font-bold mb-4 flex items-center gap-2">
+              <Palette className="text-[var(--accent-base)]" /> Tema de Acento
             </h4>
             <div className="grid grid-cols-4 sm:grid-cols-8 gap-4">
               {colors.map(color => {
-                const isActive = currentTheme === color.id;
+                const isActive = accentTheme === color.id;
                 return (
                   <button
                     key={color.id}
-                    onClick={() => onThemeChange(color.id)}
-                    className={`group relative flex flex-col items-center gap-2 outline-none`}
+                    onClick={() => handleThemeChange(color.id)}
+                    className="group relative flex flex-col items-center gap-2 outline-none"
                   >
-                    <div className={`w-12 h-12 rounded-full ${color.bg} shadow-md transition-all duration-300 ${isActive ? `ring-4 ring-offset-2 ${color.ring} dark:ring-offset-gray-900 scale-110` : 'hover:scale-110'}`} />
-                    <span className={`text-xs font-bold transition-colors ${isActive ? 'text-gray-900 dark:text-white' : 'text-gray-500 dark:text-gray-400 opacity-0 group-hover:opacity-100'}`}>
+                    <div 
+                      className="w-12 h-12 rounded-full shadow-md transition-all duration-300"
+                      style={{ 
+                        backgroundColor: color.hex,
+                        boxShadow: isActive ? `0 0 0 4px var(--bg-surface), 0 0 0 6px ${color.hex}` : 'none',
+                        transform: isActive ? 'scale(1.05)' : 'scale(1)'
+                      }}
+                    />
+                    <span className={`text-xs font-bold transition-colors ${isActive ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`} style={{ color: isActive ? 'var(--text-main)' : 'var(--text-muted)' }}>
                       {color.label}
                     </span>
                   </button>
@@ -99,27 +126,27 @@ export default function ProfilePage({ user, profile, onProfileUpdate, currentThe
         </div>
       </div>
 
-      <div className="bg-red-50/50 dark:bg-red-900/10 backdrop-blur-md p-6 rounded-3xl border border-red-100 dark:border-red-900/30">
+      <div className="glass-card p-6 border-red-500/20 bg-red-500/5">
         {!showLogoutConfirm ? (
           <button 
             onClick={() => setShowLogoutConfirm(true)}
-            className="flex items-center justify-center gap-2 w-full py-4 rounded-xl text-red-600 dark:text-red-400 font-bold hover:bg-red-100 dark:hover:bg-red-900/30 transition-colors"
+            className="flex items-center justify-center gap-2 w-full py-4 rounded-xl text-red-500 font-bold hover:bg-red-500/10 transition-colors"
           >
             <LogOut size={20} /> Cerrar Sesión
           </button>
         ) : (
           <div className="flex flex-col items-center gap-4 animate-in fade-in zoom-in-95">
-            <p className="text-red-800 dark:text-red-300 font-bold">¿Seguro que deseas salir?</p>
+            <p className="text-red-500 font-bold">¿Seguro que deseas salir?</p>
             <div className="flex gap-4 w-full">
               <button 
                 onClick={() => setShowLogoutConfirm(false)}
-                className="flex-1 py-3 bg-white dark:bg-gray-800 rounded-xl font-bold text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700"
+                className="flex-1 py-3 bg-[var(--bg-surface)] rounded-xl font-bold border border-[var(--border-subtle)] hover:bg-[var(--bg-base)] transition-colors"
               >
                 Cancelar
               </button>
               <button 
                 onClick={handleLogout}
-                className="flex-1 py-3 bg-red-600 hover:bg-red-700 text-white rounded-xl font-bold shadow-lg shadow-red-500/30"
+                className="flex-1 py-3 bg-red-600 hover:bg-red-700 text-white rounded-xl font-bold shadow-lg shadow-red-500/30 transition-all"
               >
                 Sí, salir
               </button>

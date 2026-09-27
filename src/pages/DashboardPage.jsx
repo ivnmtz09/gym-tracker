@@ -66,7 +66,7 @@ export default function DashboardPage({ user, profile }) {
         </div>
         
         {profile?.initialImc && (
-          <div className="bg-white/60 dark:bg-gray-800/60 backdrop-blur-xl px-4 py-3 rounded-2xl shadow-sm border border-white/20 dark:border-gray-700/30 flex items-center gap-3">
+          <div className="glass-card px-4 py-3 rounded-2xl shadow-sm border border-white/20 dark:border-gray-700/30 flex items-center gap-3">
             <div className="bg-green-100 dark:bg-green-900/30 p-2 rounded-xl text-green-600 dark:text-green-400">
               <Activity size={20} />
             </div>
@@ -80,7 +80,7 @@ export default function DashboardPage({ user, profile }) {
 
       <div className="grid lg:grid-cols-5 gap-6">
         <div className="lg:col-span-2 flex flex-col space-y-6">
-          <div className="bg-white/60 dark:bg-gray-800/60 backdrop-blur-xl p-6 sm:p-8 rounded-3xl shadow-sm border border-white/20 dark:border-gray-700/30 flex-1 relative overflow-hidden group">
+          <div className="glass-card p-6 sm:p-8 rounded-3xl shadow-sm border border-white/20 dark:border-gray-700/30 flex-1 relative overflow-hidden group">
             <div className="absolute top-0 right-0 w-32 h-32 bg-primary-500/10 dark:bg-primary-900/20 rounded-full blur-3xl -mr-8 -mt-8 pointer-events-none" />
             
             <div className="relative z-10 flex flex-col h-full">
@@ -120,7 +120,7 @@ export default function DashboardPage({ user, profile }) {
                   className={`w-full flex items-center justify-center gap-2 px-5 py-4 rounded-2xl font-bold text-white transition-all focus:ring-4 focus:outline-none shadow-lg hover:-translate-y-0.5 active:translate-y-0 ${
                     showCheckIn 
                       ? 'bg-gray-800 hover:bg-gray-900 focus:ring-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700 shadow-gray-900/20' 
-                      : 'bg-gradient-to-r from-primary-600 to-primary-500 hover:from-primary-700 hover:to-primary-600 focus:ring-primary-300 shadow-primary-600/30'
+                      : 'btn-accent'
                   }`}
                 >
                   <CheckCircle size={22} />
@@ -131,7 +131,7 @@ export default function DashboardPage({ user, profile }) {
           </div>
 
           {todayCheckIns.length > 0 && !showCheckIn && (
-            <div className="bg-white/60 dark:bg-gray-800/60 backdrop-blur-xl p-6 rounded-3xl shadow-sm border border-white/20 dark:border-gray-700/30">
+            <div className="glass-card p-6 rounded-3xl shadow-sm border border-white/20 dark:border-gray-700/30">
               <h4 className="text-lg font-bold text-gray-900 dark:text-white mb-4">Registros de hoy</h4>
               <div className="space-y-3">
                 {todayCheckIns.map(ci => (
@@ -167,7 +167,7 @@ export default function DashboardPage({ user, profile }) {
 
         <div className="lg:col-span-3 flex flex-col">
           {showCheckIn ? (
-            <div className="bg-white/60 dark:bg-gray-800/60 backdrop-blur-xl p-6 sm:p-8 rounded-3xl shadow-sm border border-white/20 dark:border-gray-700/30 h-full animate-in slide-in-from-right-8 duration-300">
+            <div className="glass-card p-6 sm:p-8 rounded-3xl shadow-sm border border-white/20 dark:border-gray-700/30 h-full animate-in slide-in-from-right-8 duration-300">
               <CheckInForm 
                 user={user} 
                 onSuccess={handleCheckInSuccess} 
@@ -175,7 +175,7 @@ export default function DashboardPage({ user, profile }) {
               />
             </div>
           ) : (
-            <div className="bg-white/60 dark:bg-gray-800/60 backdrop-blur-xl p-6 sm:p-8 rounded-3xl shadow-sm border border-white/20 dark:border-gray-700/30 h-full flex flex-col">
+            <div className="glass-card p-6 sm:p-8 rounded-3xl shadow-sm border border-white/20 dark:border-gray-700/30 h-full flex flex-col">
               <div className="text-sm font-medium text-center text-gray-500 border-b border-gray-200/50 dark:text-gray-400 dark:border-gray-700/50 mb-6">
                 <ul className="flex flex-wrap -mb-px">
                   <li className="mr-2">
