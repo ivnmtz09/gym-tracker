@@ -3,6 +3,21 @@ import { saveUserProfile } from '../services/db';
 import { PROGRAM_TYPES } from '../data/routines';
 import Mascot from './Mascot';
 
+const PROGRAM_DESCRIPTIONS = {
+  ppl: "Divide el cuerpo en Empuje, Tracción y Piernas. Ideal para masa muscular.",
+  torso_pierna: "Alterna días de parte superior e inferior. Excelente balance.",
+  weider: "Un grupo muscular por día. Clásico del culturismo.",
+  full_body: "Todo el cuerpo en una sesión. Ideal para optimizar tiempo.",
+  powerlifting: "Fuerza máxima en Sentadilla, Press Banca y Peso Muerto.",
+  halterofilia: "Potencia olímpica: Arrancada y Dos Tiempos.",
+  strongman: "Fuerza funcional extrema con objetos pesados.",
+  crossfit: "Alta intensidad, gimnasia y levantamientos en WODs.",
+  funcional: "Patrones de movimiento para la vida diaria.",
+  calistenia: "Dominio del propio peso corporal y barras.",
+  hiit: "Cardio intenso por intervalos cortos para quemar grasa.",
+  tabata: "Variante extrema de HIIT en solo 4 minutos."
+};
+
 export default function Onboarding({ user, onComplete }) {
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
@@ -122,20 +137,24 @@ export default function Onboarding({ user, onComplete }) {
               <div className="space-y-4 max-h-96 overflow-y-auto pr-2 pb-4">
                 {Object.entries(PROGRAM_TYPES).map(([id, title]) => {
                   const isSelected = formData.programId === id;
+                  const desc = PROGRAM_DESCRIPTIONS[id] || "Programa de entrenamiento general.";
                   return (
                     <div 
                       key={id}
                       onClick={() => setFormData({...formData, programId: id})}
                       className={`cursor-pointer p-5 rounded-2xl border-2 transition-all ${isSelected ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20 shadow-md' : 'border-gray-200 dark:border-gray-700 bg-white/50 dark:bg-gray-800/50 hover:border-primary-300 dark:hover:border-primary-700'}`}
                     >
-                      <div className="flex items-center justify-between">
+                      <div className="flex items-center justify-between mb-1">
                         <span className={`font-bold text-lg ${isSelected ? 'text-primary-700 dark:text-primary-400' : 'text-gray-800 dark:text-gray-200'}`}>
                           {title}
                         </span>
-                        <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${isSelected ? 'border-primary-500' : 'border-gray-300 dark:border-gray-600'}`}>
+                        <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 ml-4 ${isSelected ? 'border-primary-500' : 'border-gray-300 dark:border-gray-600'}`}>
                           {isSelected && <div className="w-3 h-3 bg-primary-500 rounded-full" />}
                         </div>
                       </div>
+                      <p className={`text-sm ${isSelected ? 'text-primary-600 dark:text-primary-300' : 'text-gray-500 dark:text-gray-400'}`}>
+                        {desc}
+                      </p>
                     </div>
                   );
                 })}

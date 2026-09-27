@@ -8,7 +8,13 @@ export default function Login() {
   const auth = getAuth();
   const provider = new GoogleAuthProvider();
 
+  const [termsAccepted, setTermsAccepted] = useState(false);
+
   const handleGoogleLogin = async () => {
+    if (!termsAccepted) {
+      setError('Debes aceptar los Términos y Condiciones para continuar.');
+      return;
+    }
     setError('');
     setLoading(true);
     try {
@@ -28,7 +34,7 @@ export default function Login() {
       <div className="absolute top-[-10%] left-[-10%] w-96 h-96 bg-primary-500/20 rounded-full blur-[100px] pointer-events-none" />
       <div className="absolute bottom-[-10%] right-[-10%] w-96 h-96 bg-purple-500/20 rounded-full blur-[100px] pointer-events-none" />
 
-      <div className="w-full max-w-md bg-white dark:bg-gray-800 rounded-3xl shadow-2xl border border-gray-100 dark:border-gray-700 p-8 sm:p-10 relative z-10 animate-in zoom-in-95 duration-500">
+      <div className="w-full max-w-md bg-white/70 dark:bg-gray-800/70 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/20 dark:border-gray-700/50 p-8 sm:p-10 relative z-10 animate-in zoom-in-95 duration-500">
         
         <div className="flex flex-col items-center justify-center mb-8">
           <div className="mb-4">
@@ -43,15 +49,33 @@ export default function Login() {
         </div>
 
         {error && (
-          <div className="mb-6 p-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 border border-red-100 dark:border-red-800/30 text-center font-medium">
+          <div className="mb-6 p-4 text-sm text-red-800 rounded-2xl bg-red-50/80 dark:bg-red-900/20 dark:text-red-400 border border-red-100 dark:border-red-900/30 text-center font-bold backdrop-blur-sm">
             {error}
           </div>
         )}
 
+        <div className="mb-6 flex items-start gap-3">
+          <div className="flex items-center h-5">
+            <input 
+              id="terms" 
+              type="checkbox" 
+              checked={termsAccepted}
+              onChange={(e) => {
+                setTermsAccepted(e.target.checked);
+                if (e.target.checked) setError('');
+              }}
+              className="w-5 h-5 border border-gray-300 rounded-md bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800 transition-all text-primary-600" 
+            />
+          </div>
+          <label htmlFor="terms" className="text-sm font-medium text-gray-600 dark:text-gray-300">
+            Acepto los <a href="#" className="text-primary-600 dark:text-primary-400 hover:underline font-bold">Términos y Condiciones</a> y la Política de Privacidad de ForgeFit.
+          </label>
+        </div>
+
         <button
           onClick={handleGoogleLogin}
-          disabled={loading}
-          className="w-full flex items-center justify-center gap-3 bg-white dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-600 text-gray-700 dark:text-white p-4 rounded-xl font-bold hover:bg-gray-50 dark:hover:bg-gray-600 hover:border-gray-300 dark:hover:border-gray-500 hover:shadow-md transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed group focus:outline-none focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700"
+          disabled={loading || !termsAccepted}
+          className="w-full flex items-center justify-center gap-3 bg-white dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-600 text-gray-700 dark:text-white p-4 rounded-xl font-bold hover:bg-gray-50 dark:hover:bg-gray-600 hover:border-gray-300 dark:hover:border-gray-500 shadow-sm transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed group focus:outline-none focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700"
         >
           {loading ? (
             <div className="w-6 h-6 border-2 border-gray-300 border-t-primary-600 rounded-full animate-spin" />
