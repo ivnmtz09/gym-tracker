@@ -3,16 +3,18 @@ import CheckInForm from './CheckInForm';
 import Stats from './Stats';
 import MuscleMap from './MuscleMap';
 import CalendarView from './CalendarView';
-import { Calendar, Clock, CheckCircle, Flame, Activity, Trash2, LayoutDashboard, CalendarDays } from 'lucide-react';
+import GroupDashboard from './GroupDashboard';
+import { Calendar, Clock, CheckCircle, Flame, Activity, Trash2, LayoutDashboard, CalendarDays, UsersRound } from 'lucide-react';
 import { ROUTINES, PROGRAM_TYPES } from '../data/routines';
-import { getUserCheckIns, deleteCheckIn } from '../services/db';
+import { getUserCheckIns, deleteCheckIn, saveUserProfile } from '../services/db';
 
-export default function Dashboard({ user, profile }) {
+export default function Dashboard({ user, profile: initialProfile }) {
   const [showCheckIn, setShowCheckIn] = useState(false);
   const [refreshStats, setRefreshStats] = useState(0);
   const [allCheckIns, setAllCheckIns] = useState([]);
   const [todayCheckIns, setTodayCheckIns] = useState([]);
-  const [activeTab, setActiveTab] = useState('stats'); // 'stats' | 'calendar'
+  const [activeTab, setActiveTab] = useState('stats'); // 'stats' | 'calendar' | 'group'
+  const [profile, setProfile] = useState(initialProfile);
 
   const todayIndex = new Date().getDay();
   
@@ -203,15 +205,25 @@ export default function Dashboard({ user, profile }) {
                       <CalendarDays size={18} /> Calendario
                     </button>
                   </li>
+                  <li className="mr-2">
+                    <button 
+                      onClick={() => setActiveTab('group')}
+                      className={`inline-flex items-center gap-2 p-4 border-b-2 rounded-t-lg transition-colors ${
+                        activeTab === 'group' 
+                          ? 'text-blue-600 border-blue-600 active dark:text-blue-500 dark:border-blue-500' 
+                          : 'border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300'
+                      }`}
+                    >
+                      <UsersRound size={18} /> Comunidad
+                    </button>
+                  </li>
                 </ul>
               </div>
 
               <div className="flex-1 relative">
-                {activeTab === 'stats' ? (
-                  <Stats user={user} refreshTrigger={refreshStats} />
-                ) : (
-                  <CalendarView checkIns={allCheckIns} />
-                )}
+                {activeTab === 'stats' && <Stats user={user} refreshTrigger={refreshStats} />}
+                {activeTab === 'calendar' && <CalendarView checkIns={allCheckIns} />}
+                {activeTab === 'group' && <GroupDashboard user={user} profile={profile} onProfileUpdate={setProfile} />}
               </div>
             </div>
           )}
