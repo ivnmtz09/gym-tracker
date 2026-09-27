@@ -60,11 +60,11 @@ export default function Onboarding({ user, onComplete }) {
   return (
     <div className="max-w-xl mx-auto bg-white p-8 rounded-3xl shadow-xl border border-slate-100 mt-10">
       <div className="flex justify-center mb-6">
-        <div className="bg-blue-100 p-4 rounded-full text-blue-600">
+        <div className="bg-primary-100 p-4 rounded-full text-primary-600">
           <Activity size={32} />
         </div>
       </div>
-      <h2 className="text-3xl font-extrabold text-center text-slate-800 mb-2">Bienvenido a Gym Tracker</h2>
+      <h2 className="text-3xl font-extrabold text-center text-slate-800 mb-2">Bienvenido a ForgeFit</h2>
       <p className="text-slate-500 text-center mb-8">Vamos a configurar tu perfil para personalizar tu experiencia.</p>
 
       <form onSubmit={handleSubmit} className="space-y-6">
@@ -75,7 +75,7 @@ export default function Onboarding({ user, onComplete }) {
               type="number" 
               required
               min="100" max="250"
-              className="w-full border border-slate-200 p-3 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none"
+              className="w-full border border-slate-200 p-3 rounded-xl focus:ring-2 focus:ring-primary-500 outline-none"
               value={height} onChange={(e) => setHeight(e.target.value)}
               placeholder="Ej: 175"
             />
@@ -86,7 +86,7 @@ export default function Onboarding({ user, onComplete }) {
               type="number" 
               required
               min="30" max="200" step="0.1"
-              className="w-full border border-slate-200 p-3 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none"
+              className="w-full border border-slate-200 p-3 rounded-xl focus:ring-2 focus:ring-primary-500 outline-none"
               value={weight} onChange={(e) => setWeight(e.target.value)}
               placeholder="Ej: 70.5"
             />
@@ -96,7 +96,7 @@ export default function Onboarding({ user, onComplete }) {
         <div>
           <label className="block text-sm font-bold text-slate-700 mb-2">Género</label>
           <select 
-            className="w-full border border-slate-200 p-3 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none bg-white"
+            className="w-full border border-slate-200 p-3 rounded-xl focus:ring-2 focus:ring-primary-500 outline-none bg-white"
             value={gender} onChange={(e) => setGender(e.target.value)}
           >
             <option value="masculino">Masculino</option>
@@ -108,7 +108,7 @@ export default function Onboarding({ user, onComplete }) {
         <div>
           <label className="block text-sm font-bold text-slate-700 mb-2">¿Cuál es tu programa de entrenamiento?</label>
           <select 
-            className="w-full border border-slate-200 p-3 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none bg-white"
+            className="w-full border border-slate-200 p-3 rounded-xl focus:ring-2 focus:ring-primary-500 outline-none bg-white"
             value={programId} onChange={(e) => setProgramId(e.target.value)}
           >
             <optgroup label="Fuerza y Estetica">
@@ -144,7 +144,7 @@ export default function Onboarding({ user, onComplete }) {
                 onClick={() => toggleDay(day.id)}
                 className={`w-10 h-10 rounded-full font-bold flex items-center justify-center transition-colors ${
                   trainingDays.includes(day.id)
-                    ? 'bg-blue-600 text-white shadow-md'
+                    ? 'bg-primary-600 text-white shadow-md'
                     : 'bg-slate-100 text-slate-400 hover:bg-slate-200'
                 }`}
               >
@@ -157,7 +157,7 @@ export default function Onboarding({ user, onComplete }) {
         <button 
           type="submit" 
           disabled={isSubmitting || trainingDays.length === 0}
-          className="w-full bg-blue-600 text-white font-bold p-4 rounded-xl shadow-lg shadow-blue-500/30 hover:bg-blue-700 transition disabled:opacity-70"
+          className="w-full bg-primary-600 text-white font-bold p-4 rounded-xl shadow-lg shadow-primary-500/30 hover:bg-primary-700 transition disabled:opacity-70"
         >
           {isSubmitting ? 'Guardando...' : 'Comenzar a Entrenar'}
         </button>

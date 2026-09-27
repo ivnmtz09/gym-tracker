@@ -60,7 +60,7 @@ export default function Dashboard({ user, profile: initialProfile }) {
       <header className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
         <div>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900 dark:text-white tracking-tight">
-            Hola, <span className="text-blue-600 dark:text-blue-500">{capitalizedName}</span>
+            Hola, <span className="text-primary-600 dark:text-primary-500">{capitalizedName}</span>
           </h2>
           <p className="text-gray-500 dark:text-gray-400 mt-2 text-lg font-medium">
             Programa: <strong className="text-gray-900 dark:text-gray-200">{programName}</strong>
@@ -83,11 +83,11 @@ export default function Dashboard({ user, profile: initialProfile }) {
       <div className="grid lg:grid-cols-5 gap-6">
         <div className="lg:col-span-2 flex flex-col space-y-6">
           <div className="bg-white dark:bg-gray-800 p-6 sm:p-8 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 flex-1 relative overflow-hidden group">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-blue-50 dark:bg-blue-900/10 rounded-full blur-3xl -mr-8 -mt-8 pointer-events-none" />
+            <div className="absolute top-0 right-0 w-32 h-32 bg-primary-50 dark:bg-primary-900/10 rounded-full blur-3xl -mr-8 -mt-8 pointer-events-none" />
             
             <div className="relative z-10 flex flex-col h-full">
               <div className="flex items-center gap-3 mb-6">
-                <div className={`p-2.5 rounded-lg ${isRestDay ? 'bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400' : 'bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400'}`}>
+                <div className={`p-2.5 rounded-lg ${isRestDay ? 'bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400' : 'bg-primary-100 text-primary-600 dark:bg-primary-900/30 dark:text-primary-400'}`}>
                   {isRestDay ? <Flame size={24} /> : <Calendar size={24} />}
                 </div>
                 <h3 className="text-xl font-bold text-gray-900 dark:text-white">Plan de Hoy</h3>
@@ -103,7 +103,7 @@ export default function Dashboard({ user, profile: initialProfile }) {
                   
                   {!isRestDay && (
                     <div className="inline-flex items-center gap-2 bg-white dark:bg-gray-800 px-3 py-1.5 rounded-lg border border-gray-200 dark:border-gray-600 text-sm font-semibold text-gray-600 dark:text-gray-300 shadow-sm">
-                      <Clock size={16} className="text-blue-600 dark:text-blue-500" />
+                      <Clock size={16} className="text-primary-600 dark:text-primary-500" />
                       <span>~60 min</span>
                     </div>
                   )}
@@ -122,7 +122,7 @@ export default function Dashboard({ user, profile: initialProfile }) {
                   className={`w-full flex items-center justify-center gap-2 px-5 py-3.5 rounded-lg font-medium text-white transition-all focus:ring-4 focus:outline-none ${
                     showCheckIn 
                       ? 'bg-gray-800 hover:bg-gray-900 focus:ring-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700' 
-                      : 'bg-blue-700 hover:bg-blue-800 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
+                      : 'bg-primary-700 hover:bg-primary-800 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800'
                   }`}
                 >
                   <CheckCircle size={20} />
@@ -186,7 +186,7 @@ export default function Dashboard({ user, profile: initialProfile }) {
                       onClick={() => setActiveTab('stats')}
                       className={`inline-flex items-center gap-2 p-4 border-b-2 rounded-t-lg transition-colors ${
                         activeTab === 'stats' 
-                          ? 'text-blue-600 border-blue-600 active dark:text-blue-500 dark:border-blue-500' 
+                          ? 'text-primary-600 border-primary-600 active dark:text-primary-500 dark:border-primary-500' 
                           : 'border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300'
                       }`}
                     >
@@ -198,7 +198,7 @@ export default function Dashboard({ user, profile: initialProfile }) {
                       onClick={() => setActiveTab('calendar')}
                       className={`inline-flex items-center gap-2 p-4 border-b-2 rounded-t-lg transition-colors ${
                         activeTab === 'calendar' 
-                          ? 'text-blue-600 border-blue-600 active dark:text-blue-500 dark:border-blue-500' 
+                          ? 'text-primary-600 border-primary-600 active dark:text-primary-500 dark:border-primary-500' 
                           : 'border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300'
                       }`}
                     >
@@ -210,7 +210,7 @@ export default function Dashboard({ user, profile: initialProfile }) {
                       onClick={() => setActiveTab('group')}
                       className={`inline-flex items-center gap-2 p-4 border-b-2 rounded-t-lg transition-colors ${
                         activeTab === 'group' 
-                          ? 'text-blue-600 border-blue-600 active dark:text-blue-500 dark:border-blue-500' 
+                          ? 'text-primary-600 border-primary-600 active dark:text-primary-500 dark:border-primary-500' 
                           : 'border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300'
                       }`}
                     >

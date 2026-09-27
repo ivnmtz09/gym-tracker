@@ -73,7 +73,7 @@ export default function GroupDashboard({ user, profile, onProfileUpdate }) {
     return (
       <div className="bg-white dark:bg-gray-800 p-6 sm:p-8 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700">
         <div className="text-center mb-8">
-          <Users className="w-16 h-16 text-blue-500 mx-auto mb-4" />
+          <Users className="w-16 h-16 text-primary-500 mx-auto mb-4" />
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Comunidad y Amigos</h2>
           <p className="text-gray-500 dark:text-gray-400 mt-2">Crea un grupo o únete a uno existente para entrenar con amigos o tu pareja.</p>
         </div>
@@ -89,14 +89,14 @@ export default function GroupDashboard({ user, profile, onProfileUpdate }) {
                 <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nombre del Grupo</label>
                 <input 
                   type="text" 
-                  className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                  className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
                   placeholder="Ej: Gym Bros 2026"
                   value={groupName}
                   onChange={e => setGroupName(e.target.value)}
                   required
                 />
               </div>
-              <button type="submit" className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+              <button type="submit" className="w-full text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800">
                 Crear Grupo
               </button>
             </form>
@@ -110,7 +110,7 @@ export default function GroupDashboard({ user, profile, onProfileUpdate }) {
                 <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Código de Invitación</label>
                 <input 
                   type="text" 
-                  className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                  className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
                   placeholder="Pega el código aquí..."
                   value={joinCode}
                   onChange={e => setJoinCode(e.target.value)}
@@ -155,7 +155,7 @@ export default function GroupDashboard({ user, profile, onProfileUpdate }) {
     <div className="bg-white dark:bg-gray-800 p-6 sm:p-8 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 animate-in fade-in">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
         <div className="flex items-center gap-4">
-          <div className="bg-blue-100 dark:bg-blue-900/30 p-3 rounded-xl text-blue-600 dark:text-blue-400">
+          <div className="bg-primary-100 dark:bg-primary-900/30 p-3 rounded-xl text-primary-600 dark:text-primary-400">
             <UsersRound size={28} />
           </div>
           <div>
@@ -215,8 +215,8 @@ export default function GroupDashboard({ user, profile, onProfileUpdate }) {
                     {ci.date.toLocaleDateString('es-ES', { weekday: 'short', day: 'numeric', month: 'short' })} • Intensidad: {ci.intensity || 'Normal'}
                   </p>
                 </div>
-                <div className="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
-                  <Check size={14} className="text-blue-600 dark:text-blue-400" />
+                <div className="w-8 h-8 rounded-full bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center">
+                  <Check size={14} className="text-primary-600 dark:text-primary-400" />
                 </div>
               </div>
             ))}

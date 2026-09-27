@@ -24,10 +24,10 @@ export default function CalendarView({ checkIns }) {
   const getIntensityColor = (intensity) => {
     switch (intensity) {
       case 'suave': return 'bg-green-400';
-      case 'normal': return 'bg-blue-500';
+      case 'normal': return 'bg-primary-500';
       case 'fuerte': return 'bg-purple-500';
       case 'extremo': return 'bg-red-600';
-      default: return 'bg-blue-500';
+      default: return 'bg-primary-500';
     }
   };
 
@@ -72,7 +72,7 @@ export default function CalendarView({ checkIns }) {
               onClick={() => ci && setSelectedCheckIn(ci)}
               className={`aspect-square flex flex-col items-center justify-center rounded-xl border p-1 transition-all cursor-pointer relative ${
                 !isCurrentMonth ? 'opacity-30 border-transparent pointer-events-none' : 
-                isDayToday ? 'border-blue-500 font-bold bg-blue-50 dark:bg-blue-900/20' : 'border-gray-100 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-600'
+                isDayToday ? 'border-primary-500 font-bold bg-primary-50 dark:bg-primary-900/20' : 'border-gray-100 dark:border-gray-700 hover:border-primary-300 dark:hover:border-primary-600'
               } ${ci ? 'bg-gray-50 dark:bg-gray-750' : 'bg-white dark:bg-gray-800'}`}
             >
               <span className={`text-sm sm:text-base ${isCurrentMonth ? 'text-gray-900 dark:text-gray-100' : 'text-gray-400'}`}>
@@ -142,7 +142,7 @@ export default function CalendarView({ checkIns }) {
 
             <button 
               onClick={() => setSelectedCheckIn(null)}
-              className="mt-6 w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+              className="mt-6 w-full text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800"
             >
               Cerrar
             </button>
@@ -153,7 +153,7 @@ export default function CalendarView({ checkIns }) {
       {/* Leyenda */}
       <div className="mt-6 pt-4 border-t border-gray-100 dark:border-gray-700 flex flex-wrap gap-4 text-xs font-medium text-gray-500 dark:text-gray-400 justify-center">
         <div className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 rounded-full bg-green-400" /> Suave</div>
-        <div className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 rounded-full bg-blue-500" /> Normal</div>
+        <div className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 rounded-full bg-primary-500" /> Normal</div>
         <div className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 rounded-full bg-purple-500" /> Fuerte</div>
         <div className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 rounded-full bg-red-600" /> Extremo</div>
       </div>

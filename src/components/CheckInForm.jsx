@@ -54,7 +54,7 @@ export default function CheckInForm({ user, onSuccess, onCancel }) {
           <label className="flex items-center cursor-pointer p-4 border border-gray-200 rounded-lg dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
             <input 
               type="checkbox" 
-              className="w-5 h-5 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+              className="w-5 h-5 text-primary-600 bg-gray-100 border-gray-300 rounded focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
               checked={attended}
               onChange={(e) => setAttended(e.target.checked)}
             />
@@ -72,7 +72,7 @@ export default function CheckInForm({ user, onSuccess, onCancel }) {
                 </label>
                 <input 
                   type="time" 
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                   value={time}
                   onChange={(e) => setTime(e.target.value)}
                   disabled={!attended}
@@ -85,7 +85,7 @@ export default function CheckInForm({ user, onSuccess, onCancel }) {
                 </label>
                 <input 
                   type="number" step="0.1"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                   value={currentWeight}
                   onChange={(e) => setCurrentWeight(e.target.value)}
                   disabled={!attended}
@@ -101,19 +101,19 @@ export default function CheckInForm({ user, onSuccess, onCancel }) {
               <ul className="grid w-full gap-4 md:grid-cols-4">
                 <li>
                   <input type="radio" id="int-suave" name="intensity" value="suave" className="hidden peer" onChange={(e)=>setIntensity(e.target.value)} checked={intensity==='suave'} />
-                  <label htmlFor="int-suave" className="inline-flex items-center justify-center w-full p-3 text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700">
+                  <label htmlFor="int-suave" className="inline-flex items-center justify-center w-full p-3 text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 dark:peer-checked:text-primary-500 peer-checked:border-primary-600 peer-checked:text-primary-600 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700">
                       <div className="block text-sm font-semibold">Suave</div>
                   </label>
                 </li>
                 <li>
                   <input type="radio" id="int-normal" name="intensity" value="normal" className="hidden peer" onChange={(e)=>setIntensity(e.target.value)} checked={intensity==='normal'} />
-                  <label htmlFor="int-normal" className="inline-flex items-center justify-center w-full p-3 text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700">
+                  <label htmlFor="int-normal" className="inline-flex items-center justify-center w-full p-3 text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 dark:peer-checked:text-primary-500 peer-checked:border-primary-600 peer-checked:text-primary-600 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700">
                       <div className="block text-sm font-semibold">Normal</div>
                   </label>
                 </li>
                 <li>
                   <input type="radio" id="int-fuerte" name="intensity" value="fuerte" className="hidden peer" onChange={(e)=>setIntensity(e.target.value)} checked={intensity==='fuerte'} />
-                  <label htmlFor="int-fuerte" className="inline-flex items-center justify-center w-full p-3 text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700">
+                  <label htmlFor="int-fuerte" className="inline-flex items-center justify-center w-full p-3 text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 dark:peer-checked:text-primary-500 peer-checked:border-primary-600 peer-checked:text-primary-600 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700">
                       <div className="block text-sm font-semibold">Fuerte</div>
                   </label>
                 </li>
@@ -131,7 +131,7 @@ export default function CheckInForm({ user, onSuccess, onCancel }) {
                 Notas del dia / Ejercicios
               </label>
               <textarea 
-                className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 min-h-[100px]"
+                className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500 min-h-[100px]"
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
                 placeholder="Ej. Pecho plano 4x10..."
@@ -152,7 +152,7 @@ export default function CheckInForm({ user, onSuccess, onCancel }) {
           <button 
             type="submit" 
             disabled={isSubmitting}
-            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 flex-[2] disabled:opacity-50"
+            className="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800 flex-[2] disabled:opacity-50"
           >
             {isSubmitting ? 'Guardando...' : 'Guardar Registro'}
           </button>
