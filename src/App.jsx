@@ -57,7 +57,7 @@ function AppContent() {
         >
           <Route index element={<DashboardPage user={user} profile={profile} />} />
           <Route path="community" element={<CommunityPage user={user} profile={profile} onProfileUpdate={setProfile} />} />
-          <Route path="profile" element={<ProfilePage user={user} profile={profile} />} />
+          <Route path="profile" element={<ProfilePage user={user} profile={profile} onProfileUpdate={setProfile} />} />
         </Route>
 
         <Route path="*" element={<NotFoundPage />} />

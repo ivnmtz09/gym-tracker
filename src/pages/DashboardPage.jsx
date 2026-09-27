@@ -17,11 +17,11 @@ export default function DashboardPage({ user, profile }) {
   const todayIndex = new Date().getDay();
   
   const programId = profile?.programId || 'ppl';
-  const routineMap = ROUTINES[programId] || ROUTINES['default'];
-  const todaysRoutine = routineMap[todayIndex] || routineMap['default'];
-  const programName = PROGRAM_TYPES[programId] || "Programa General";
+  const routineMap = profile?.customRoutine || ROUTINES[programId] || ROUTINES['default'];
+  const todaysRoutine = routineMap[todayIndex] || routineMap['default'] || { name: 'Descanso', desc: '', type: 'rest' };
+  const programName = programId === 'custom' ? "Plan Personalizado" : (PROGRAM_TYPES[programId] || "Programa General");
   
-  const isRestDay = todayIndex === 0 || todaysRoutine.type === 'rest';
+  const isRestDay = todayIndex === 0 || todaysRoutine.type === 'rest' || !todaysRoutine.name || todaysRoutine.name.toLowerCase().includes('descanso');
 
   const loadData = async () => {
     const all = await getUserCheckIns(user.uid);
