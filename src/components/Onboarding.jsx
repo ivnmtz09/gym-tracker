@@ -34,8 +34,13 @@ export default function Onboarding({ user, onComplete }) {
       createdAt: new Date(),
     };
     
-    await saveUserProfile(user.uid, profileData);
-    onComplete(profileData);
+    const res = await saveUserProfile(user.uid, profileData);
+    if (res.success) {
+      onComplete(profileData);
+    } else {
+      alert("Hubo un error al guardar tus datos. Por favor, revisa las reglas de seguridad de Firebase en console.firebase.google.com");
+      setLoading(false);
+    }
   };
 
   return (
