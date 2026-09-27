@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import { addCheckIn } from '../services/db';
-import { Check, X, Send, Clock } from 'lucide-react';
 
 export default function CheckInForm({ user, onSuccess, onCancel }) {
   const [attended, setAttended] = useState(true);
   const [notes, setNotes] = useState('');
   const [time, setTime] = useState('');
+  const [intensity, setIntensity] = useState('normal');
+  const [currentWeight, setCurrentWeight] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
 
@@ -23,7 +24,8 @@ export default function CheckInForm({ user, onSuccess, onCancel }) {
     setIsSubmitting(true);
     setError('');
 
-    const result = await addCheckIn(user.uid, attended, notes, user.email, time);
+    const weightVal = currentWeight ? parseFloat(currentWeight) : null;
+    const result = await addCheckIn(user.uid, attended, notes, user.email, time, intensity, weightVal);
     
     setIsSubmitting(false);
     if (result.success) {
@@ -34,96 +36,125 @@ export default function CheckInForm({ user, onSuccess, onCancel }) {
   };
 
   return (
-    <div className="flex flex-col h-full">
-      <div className="mb-6">
-        <h3 className="text-2xl font-bold text-slate-800">Registro Diario</h3>
-        <p className="text-slate-500 mt-1">Guarda tu progreso de hoy para mantener la racha.</p>
+    <div className="flex flex-col h-full bg-white dark:bg-gray-800">
+      <div className="mb-6 border-b border-gray-200 dark:border-gray-700 pb-4">
+        <h3 className="text-2xl font-bold text-gray-900 dark:text-white">Registro de Entrenamiento</h3>
+        <p className="text-gray-500 dark:text-gray-400 mt-1 text-sm">Completa los datos de tu sesion para llevar el control.</p>
       </div>
       
       {error && (
-        <div className="mb-6 bg-red-50 text-red-600 p-4 rounded-xl text-sm font-medium border border-red-100 flex items-center gap-2">
-          <X size={18} />
-          {error}
+        <div className="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
+          <span className="font-medium">Error:</span> {error}
         </div>
       )}
       
       <form onSubmit={handleSubmit} className="flex-1 flex flex-col">
-        <div className="space-y-6 flex-1">
-          <div 
-            onClick={() => setAttended(!attended)}
-            className={`p-5 rounded-2xl border-2 cursor-pointer transition-all duration-200 flex items-center gap-4 ${
-              attended 
-                ? 'border-blue-500 bg-blue-50/50 shadow-sm shadow-blue-100' 
-                : 'border-slate-200 bg-white hover:border-slate-300'
-            }`}
-          >
-            <div className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors ${
-              attended ? 'bg-blue-600 text-white' : 'bg-slate-100 text-transparent'
-            }`}>
-              <Check size={18} strokeWidth={3} />
-            </div>
-            <div>
-              <p className={`font-bold text-lg ${attended ? 'text-blue-900' : 'text-slate-600'}`}>
-                {attended ? 'Si, fui a entrenar hoy' : 'No pude entrenar hoy'}
-              </p>
-            </div>
-          </div>
+        <div className="space-y-5 flex-1">
+          {/* Attended Toggle - Tailgrids / Flowbite style */}
+          <label className="flex items-center cursor-pointer p-4 border border-gray-200 rounded-lg dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+            <input 
+              type="checkbox" 
+              className="w-5 h-5 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+              checked={attended}
+              onChange={(e) => setAttended(e.target.checked)}
+            />
+            <span className="ml-3 text-base font-medium text-gray-900 dark:text-white">
+              {attended ? 'Si, asisti a entrenar hoy' : 'No asisti hoy'}
+            </span>
+          </label>
 
-          <div className={`transition-all duration-300 overflow-hidden space-y-4 ${attended ? 'opacity-100 h-auto' : 'opacity-50 h-auto pointer-events-none'}`}>
+          <div className={`transition-all duration-300 overflow-hidden space-y-5 ${attended ? 'opacity-100 h-auto' : 'opacity-50 h-0 pointer-events-none'}`}>
             
-            <div>
-              <label className="block text-sm font-bold text-slate-700 mb-2 flex items-center gap-2">
-                <Clock size={16} /> Horario de entrenamiento
-              </label>
-              <input 
-                type="time" 
-                className="w-full bg-slate-50 border border-slate-200 text-slate-800 p-3 rounded-xl focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 outline-none font-medium"
-                value={time}
-                onChange={(e) => setTime(e.target.value)}
-                disabled={!attended}
-                required={attended}
-              />
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                  Horario
+                </label>
+                <input 
+                  type="time" 
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  value={time}
+                  onChange={(e) => setTime(e.target.value)}
+                  disabled={!attended}
+                  required={attended}
+                />
+              </div>
+              <div>
+                <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                  Peso corporal (Opcional, kg)
+                </label>
+                <input 
+                  type="number" step="0.1"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  value={currentWeight}
+                  onChange={(e) => setCurrentWeight(e.target.value)}
+                  disabled={!attended}
+                  placeholder="Ej: 72.5"
+                />
+              </div>
             </div>
 
             <div>
-              <label className="block text-sm font-bold text-slate-700 mb-2">
-                ¿Qué ejercicios hiciste? / Notas del día
+              <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                Intensidad del Entrenamiento
+              </label>
+              <ul className="grid w-full gap-4 md:grid-cols-4">
+                <li>
+                  <input type="radio" id="int-suave" name="intensity" value="suave" className="hidden peer" onChange={(e)=>setIntensity(e.target.value)} checked={intensity==='suave'} />
+                  <label htmlFor="int-suave" className="inline-flex items-center justify-center w-full p-3 text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700">
+                      <div className="block text-sm font-semibold">Suave</div>
+                  </label>
+                </li>
+                <li>
+                  <input type="radio" id="int-normal" name="intensity" value="normal" className="hidden peer" onChange={(e)=>setIntensity(e.target.value)} checked={intensity==='normal'} />
+                  <label htmlFor="int-normal" className="inline-flex items-center justify-center w-full p-3 text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700">
+                      <div className="block text-sm font-semibold">Normal</div>
+                  </label>
+                </li>
+                <li>
+                  <input type="radio" id="int-fuerte" name="intensity" value="fuerte" className="hidden peer" onChange={(e)=>setIntensity(e.target.value)} checked={intensity==='fuerte'} />
+                  <label htmlFor="int-fuerte" className="inline-flex items-center justify-center w-full p-3 text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700">
+                      <div className="block text-sm font-semibold">Fuerte</div>
+                  </label>
+                </li>
+                <li>
+                  <input type="radio" id="int-extremo" name="intensity" value="extremo" className="hidden peer" onChange={(e)=>setIntensity(e.target.value)} checked={intensity==='extremo'} />
+                  <label htmlFor="int-extremo" className="inline-flex items-center justify-center w-full p-3 text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 dark:peer-checked:text-red-500 peer-checked:border-red-600 peer-checked:text-red-600 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700">
+                      <div className="block text-sm font-semibold">Extremo</div>
+                  </label>
+                </li>
+              </ul>
+            </div>
+
+            <div>
+              <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                Notas del dia / Ejercicios
               </label>
               <textarea 
-                className="w-full bg-slate-50 border border-slate-200 text-slate-800 p-4 rounded-2xl focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 focus:bg-white outline-none transition-all resize-none min-h-[140px] text-base"
+                className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 min-h-[100px]"
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
-                placeholder="Ej. Pecho plano 4x10, elevaciones laterales 4x12..."
+                placeholder="Ej. Pecho plano 4x10..."
                 disabled={!attended}
               />
             </div>
           </div>
         </div>
 
-        <div className="flex gap-4 mt-8 pt-6 border-t border-slate-100">
+        <div className="flex gap-4 mt-8 pt-4">
           <button 
             type="button" 
             onClick={onCancel}
-            className="flex-1 bg-white border border-slate-200 text-slate-700 p-4 rounded-xl font-bold hover:bg-slate-50 hover:text-slate-900 transition-colors"
+            className="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700 flex-1"
           >
             Cancelar
           </button>
           <button 
             type="submit" 
             disabled={isSubmitting}
-            className="flex-[2] flex justify-center items-center gap-2 bg-blue-600 text-white p-4 rounded-xl font-bold hover:bg-blue-700 transition-colors disabled:opacity-70 disabled:cursor-wait shadow-lg shadow-blue-600/20"
+            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 flex-[2] disabled:opacity-50"
           >
-            {isSubmitting ? (
-              <span className="flex items-center gap-2">
-                <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                Guardando...
-              </span>
-            ) : (
-              <>
-                Guardar Registro
-                <Send size={18} />
-              </>
-            )}
+            {isSubmitting ? 'Guardando...' : 'Guardar Registro'}
           </button>
         </div>
       </form>

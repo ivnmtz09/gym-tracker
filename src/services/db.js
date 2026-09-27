@@ -28,7 +28,7 @@ export const saveUserProfile = async (userId, profileData) => {
   }
 };
 
-export const addCheckIn = async (userId, attended, notes, userEmail, time) => {
+export const addCheckIn = async (userId, attended, notes, userEmail, time, intensity, currentWeight) => {
   try {
     const docRef = await addDoc(collection(db, CHECKINS_COLLECTION), {
       userId,
@@ -36,7 +36,9 @@ export const addCheckIn = async (userId, attended, notes, userEmail, time) => {
       date: Timestamp.now(),
       attended,
       notes,
-      time: time || ""
+      time: time || "",
+      intensity: intensity || "normal",
+      currentWeight: currentWeight || null
     });
     return { success: true, id: docRef.id };
   } catch (error) {
