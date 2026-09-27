@@ -1,10 +1,9 @@
-import { collection, doc, getDoc, setDoc, addDoc, getDocs, query, where, orderBy, Timestamp } from "firebase/firestore";
+import { collection, doc, getDoc, setDoc, addDoc, getDocs, query, where, orderBy, Timestamp, deleteDoc } from "firebase/firestore";
 import { db } from "../firebase";
 
 const CHECKINS_COLLECTION = "checkins";
 const USERS_COLLECTION = "users";
 
-// Funciones de Perfil de Usuario
 export const getUserProfile = async (userId) => {
   try {
     const docRef = doc(db, USERS_COLLECTION, userId);
@@ -29,15 +28,15 @@ export const saveUserProfile = async (userId, profileData) => {
   }
 };
 
-// Guardar un nuevo check-in
-export const addCheckIn = async (userId, attended, notes, userEmail) => {
+export const addCheckIn = async (userId, attended, notes, userEmail, time) => {
   try {
     const docRef = await addDoc(collection(db, CHECKINS_COLLECTION), {
       userId,
       userEmail,
       date: Timestamp.now(),
       attended,
-      notes
+      notes,
+      time: time || ""
     });
     return { success: true, id: docRef.id };
   } catch (error) {
@@ -46,7 +45,27 @@ export const addCheckIn = async (userId, attended, notes, userEmail) => {
   }
 };
 
-// Obtener check-ins de un usuario en específico
+export const updateCheckIn = async (checkInId, data) => {
+  try {
+    const docRef = doc(db, CHECKINS_COLLECTION, checkInId);
+    await setDoc(docRef, data, { merge: true });
+    return { success: true };
+  } catch (error) {
+    console.error("Error al actualizar check-in: ", error);
+    return { success: false, error };
+  }
+};
+
+export const deleteCheckIn = async (checkInId) => {
+  try {
+    await deleteDoc(doc(db, CHECKINS_COLLECTION, checkInId));
+    return { success: true };
+  } catch (error) {
+    console.error("Error al eliminar check-in: ", error);
+    return { success: false, error };
+  }
+};
+
 export const getUserCheckIns = async (userId) => {
   try {
     const q = query(
@@ -66,7 +85,6 @@ export const getUserCheckIns = async (userId) => {
   }
 };
 
-// Obtener todos los check-ins para comparar (Ivan vs Saudith)
 export const getAllCheckIns = async () => {
   try {
     const q = query(collection(db, CHECKINS_COLLECTION), orderBy("date", "asc"));

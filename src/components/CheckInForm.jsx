@@ -1,19 +1,29 @@
 import { useState } from 'react';
 import { addCheckIn } from '../services/db';
-import { Check, X, Send } from 'lucide-react';
+import { Check, X, Send, Clock } from 'lucide-react';
 
 export default function CheckInForm({ user, onSuccess, onCancel }) {
   const [attended, setAttended] = useState(true);
   const [notes, setNotes] = useState('');
+  const [time, setTime] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    const confirmMessage = attended 
+      ? "¿Confirmas que realizaste tu entrenamiento hoy en el horario indicado?"
+      : "¿Confirmas que NO realizaste tu entrenamiento hoy?";
+      
+    if (!window.confirm(confirmMessage)) {
+      return;
+    }
+
     setIsSubmitting(true);
     setError('');
 
-    const result = await addCheckIn(user.uid, attended, notes, user.email);
+    const result = await addCheckIn(user.uid, attended, notes, user.email, time);
     
     setIsSubmitting(false);
     if (result.success) {
@@ -39,7 +49,6 @@ export default function CheckInForm({ user, onSuccess, onCancel }) {
       
       <form onSubmit={handleSubmit} className="flex-1 flex flex-col">
         <div className="space-y-6 flex-1">
-          {/* Custom Checkbox Toggle */}
           <div 
             onClick={() => setAttended(!attended)}
             className={`p-5 rounded-2xl border-2 cursor-pointer transition-all duration-200 flex items-center gap-4 ${
@@ -55,23 +64,39 @@ export default function CheckInForm({ user, onSuccess, onCancel }) {
             </div>
             <div>
               <p className={`font-bold text-lg ${attended ? 'text-blue-900' : 'text-slate-600'}`}>
-                Sí, fui a entrenar hoy 💪
+                {attended ? 'Si, fui a entrenar hoy' : 'No pude entrenar hoy'}
               </p>
             </div>
           </div>
 
-          {/* Textarea with smooth transition */}
-          <div className={`transition-all duration-300 overflow-hidden ${attended ? 'opacity-100 h-auto' : 'opacity-50 h-auto pointer-events-none'}`}>
-            <label className="block text-sm font-bold text-slate-700 mb-2">
-              ¿Qué ejercicios hiciste? / Notas del día
-            </label>
-            <textarea 
-              className="w-full bg-slate-50 border border-slate-200 text-slate-800 p-4 rounded-2xl focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 focus:bg-white outline-none transition-all resize-none min-h-[140px] text-base"
-              value={notes}
-              onChange={(e) => setNotes(e.target.value)}
-              placeholder="Ej. Pecho plano 4x10, elevaciones laterales 4x12, sentí progreso en tríceps..."
-              disabled={!attended}
-            />
+          <div className={`transition-all duration-300 overflow-hidden space-y-4 ${attended ? 'opacity-100 h-auto' : 'opacity-50 h-auto pointer-events-none'}`}>
+            
+            <div>
+              <label className="block text-sm font-bold text-slate-700 mb-2 flex items-center gap-2">
+                <Clock size={16} /> Horario de entrenamiento
+              </label>
+              <input 
+                type="time" 
+                className="w-full bg-slate-50 border border-slate-200 text-slate-800 p-3 rounded-xl focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 outline-none font-medium"
+                value={time}
+                onChange={(e) => setTime(e.target.value)}
+                disabled={!attended}
+                required={attended}
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-bold text-slate-700 mb-2">
+                ¿Qué ejercicios hiciste? / Notas del día
+              </label>
+              <textarea 
+                className="w-full bg-slate-50 border border-slate-200 text-slate-800 p-4 rounded-2xl focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 focus:bg-white outline-none transition-all resize-none min-h-[140px] text-base"
+                value={notes}
+                onChange={(e) => setNotes(e.target.value)}
+                placeholder="Ej. Pecho plano 4x10, elevaciones laterales 4x12..."
+                disabled={!attended}
+              />
+            </div>
           </div>
         </div>
 
