@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { saveUserProfile } from '../services/db';
-import { Edit2, Check, X, BookOpen } from 'lucide-react';
+import { Edit2, Check, X, BookOpen, ChevronDown, Activity } from 'lucide-react';
 import { PROGRAM_TYPES, ROUTINES } from '../data/routines';
 
 const DAYS = [
@@ -34,7 +34,6 @@ export default function RoutineEditor({ user, profile, onProfileUpdate }) {
     const newProgramId = e.target.value;
     setSelectedProgram(newProgramId);
     if (newProgramId !== 'custom') {
-      // Al cambiar la base, precargamos los días con esa rutina
       setRoutineData(ROUTINES[newProgramId] || ROUTINES.default);
     }
   };
@@ -47,7 +46,6 @@ export default function RoutineEditor({ user, profile, onProfileUpdate }) {
         [field]: value
       }
     }));
-    // Si modifican manualmente los días de un programa base, lo marcamos como "custom"
     if (selectedProgram !== 'custom') {
       setSelectedProgram('custom');
     }
@@ -68,7 +66,6 @@ export default function RoutineEditor({ user, profile, onProfileUpdate }) {
 
   const cancelEdit = () => {
     setIsEditing(false);
-    // Revertir a lo que hay en el perfil
     const pId = profile?.programId || 'ppl';
     setSelectedProgram(pId);
     setRoutineData(profile?.customRoutine || ROUTINES[pId] || ROUTINES.default);
@@ -112,18 +109,30 @@ export default function RoutineEditor({ user, profile, onProfileUpdate }) {
       </div>
 
       {isEditing && (
-        <div className="mb-6 p-4 rounded-xl border border-border bg-foreground/5 flex flex-col sm:flex-row sm:items-center gap-4">
-          <label className="font-bold text-foreground whitespace-nowrap">Programa Base:</label>
-          <select 
-            value={selectedProgram}
-            onChange={handleProgramChange}
-            className="flex-1 bg-background border border-border rounded-lg p-2.5 text-sm font-semibold text-foreground focus:ring-2 focus:ring-accent/50 outline-none"
-          >
-            <option value="custom">-- Personalizado --</option>
-            {Object.entries(PROGRAM_TYPES).map(([id, name]) => (
-              <option key={id} value={id}>{name}</option>
-            ))}
-          </select>
+        <div className="mb-6 bg-background rounded-2xl border border-border shadow-sm overflow-hidden transition-all group">
+          <div className="flex flex-col sm:flex-row sm:items-center p-2">
+            <div className="px-4 py-2 flex items-center gap-3">
+              <div className="p-2 bg-accent/10 rounded-lg group-hover:scale-110 transition-transform">
+                <Activity size={18} className="text-accent" />
+              </div>
+              <label className="font-bold text-foreground whitespace-nowrap">Programa Base:</label>
+            </div>
+            <div className="flex-1 relative w-full mt-2 sm:mt-0 px-2 sm:px-0 pb-2 sm:pb-0">
+              <select 
+                value={selectedProgram}
+                onChange={handleProgramChange}
+                className="w-full appearance-none bg-foreground/5 hover:bg-foreground/10 transition-colors border border-transparent rounded-xl px-5 py-3.5 text-sm font-bold text-foreground cursor-pointer outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent"
+              >
+                <option value="custom" className="font-bold bg-background text-foreground py-2">-- Plan Personalizado --</option>
+                {Object.entries(PROGRAM_TYPES).map(([id, name]) => (
+                  <option key={id} value={id} className="font-semibold bg-background text-foreground py-2">{name}</option>
+                ))}
+              </select>
+              <div className="absolute inset-y-0 right-6 flex items-center pointer-events-none text-foreground/50 pb-2 sm:pb-0">
+                <ChevronDown size={20} />
+              </div>
+            </div>
+          </div>
         </div>
       )}
 
