@@ -115,17 +115,24 @@ export default function DashboardPage({ user, profile }) {
               </div>
               
               <div className="mt-auto">
-                <button 
-                  onClick={() => setShowCheckIn(!showCheckIn)}
-                  className={`w-full flex items-center justify-center gap-2 px-5 py-4 rounded-2xl font-bold transition-all focus:ring-4 focus:outline-none shadow-lg hover:-translate-y-0.5 active:translate-y-0 ${
-                    showCheckIn 
-                      ? 'bg-foreground/10 text-foreground hover:bg-foreground/20' 
-                      : 'btn-accent'
-                  }`}
-                >
-                  <CheckCircle size={22} />
-                  {showCheckIn ? 'Cancelar Check-in' : 'Hacer Check-in'}
-                </button>
+                {isRestDay ? (
+                  <div className="w-full flex items-center justify-center gap-3 px-5 py-4 rounded-2xl font-bold bg-green-500/10 text-green-600 dark:text-green-500 border border-green-500/20 text-center shadow-inner">
+                    <CheckCircle size={22} />
+                    <span>¡Día de recuperación! A recargar energías.</span>
+                  </div>
+                ) : (
+                  <button 
+                    onClick={() => setShowCheckIn(!showCheckIn)}
+                    className={`w-full flex items-center justify-center gap-2 px-5 py-4 rounded-2xl font-bold transition-all focus:ring-4 focus:outline-none shadow-lg hover:-translate-y-0.5 active:translate-y-0 ${
+                      showCheckIn 
+                        ? 'bg-foreground/10 text-foreground hover:bg-foreground/20' 
+                        : 'btn-accent'
+                    }`}
+                  >
+                    <CheckCircle size={22} />
+                    {showCheckIn ? 'Cancelar Check-in' : 'Hacer Check-in'}
+                  </button>
+                )}
               </div>
             </div>
           </div>
