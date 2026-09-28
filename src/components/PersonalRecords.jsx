@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import { saveUserProfile } from '../services/db';
-import { Trophy, Edit2, Check, X } from 'lucide-react';
+import { Trophy, Edit2, Check, X, Flame, Dumbbell } from 'lucide-react';
 
 const EXERCISES = [
-  { id: 'bench', label: 'Press Banca', icon: '🏋️' },
-  { id: 'squat', label: 'Sentadilla', icon: '🦵' },
-  { id: 'deadlift', label: 'Peso Muerto', icon: '🔥' }
+  { id: 'bench', label: 'Press Banca', icon: <Dumbbell size={18} className="text-accent" /> },
+  { id: 'squat', label: 'Sentadilla', icon: <Dumbbell size={18} className="text-accent" /> },
+  { id: 'deadlift', label: 'Peso Muerto', icon: <Flame size={18} className="text-orange-500" /> }
 ];
 
 export default function PersonalRecords({ user, profile, onProfileUpdate }) {

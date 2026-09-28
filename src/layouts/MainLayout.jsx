@@ -19,8 +19,15 @@ export default function MainLayout({ user, profile }) {
               Forge<span className="text-[var(--accent-base)]">Fit</span>
             </h1>
           </div>
-          <div className="flex items-center bg-[var(--bg-base)] border border-[var(--border-subtle)] rounded-full px-3 py-1.5 shadow-sm">
+          <div className="flex items-center gap-2 bg-[var(--bg-base)] border border-[var(--border-subtle)] rounded-full pl-3 pr-1 py-1 shadow-sm">
             <span className="text-sm font-bold truncate max-w-[120px]">{displayName}</span>
+            {user?.photoURL ? (
+              <img src={user.photoURL} alt="Avatar" className="w-6 h-6 rounded-full object-cover ml-1" />
+            ) : (
+              <div className="w-6 h-6 rounded-full bg-accent text-white flex items-center justify-center text-xs font-bold ml-1">
+                {displayName.charAt(0).toUpperCase()}
+              </div>
+            )}
           </div>
         </div>
       </header>

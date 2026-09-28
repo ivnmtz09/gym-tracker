@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { createGroup, joinGroup, getGroupData, getGroupCheckIns } from '../services/db';
-import { Users, Copy, Check, UsersRound, Trophy } from 'lucide-react';
+import { Users, Copy, Check, UsersRound, Trophy, Flame } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 
 export default function CommunityPage({ user, profile, onProfileUpdate }) {
@@ -234,7 +234,7 @@ export default function CommunityPage({ user, profile, onProfileUpdate }) {
                   )}
                   <div className="flex justify-end pt-1">
                     <button className="text-xs font-bold text-foreground/50 flex items-center gap-1.5 hover:text-accent transition-colors">
-                      🔥 Dar Ánimos
+                      <Flame size={14} className="text-orange-500" /> Dar Ánimos
                     </button>
                   </div>
                 </div>

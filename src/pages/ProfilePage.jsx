@@ -5,6 +5,7 @@ import { useTheme } from '../contexts/ThemeContext';
 import { saveUserProfile } from '../services/db';
 import RoutineEditor from '../components/RoutineEditor';
 import PersonalRecords from '../components/PersonalRecords';
+import PhysicalProfile from '../components/PhysicalProfile';
 
 export default function ProfilePage({ user, profile, onProfileUpdate }) {
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
@@ -57,9 +58,13 @@ export default function ProfilePage({ user, profile, onProfileUpdate }) {
 
       <div className="glass-card p-6 sm:p-8">
         <div className="flex items-center gap-5 mb-8">
-          <div className="w-16 h-16 rounded-full flex items-center justify-center text-white text-2xl font-bold btn-accent">
-            {displayName.charAt(0).toUpperCase()}
-          </div>
+          {user?.photoURL ? (
+            <img src={user.photoURL} alt="Avatar" className="w-16 h-16 rounded-full shadow-md object-cover border-2 border-accent/20" />
+          ) : (
+            <div className="w-16 h-16 rounded-full flex items-center justify-center text-white text-2xl font-bold btn-accent shadow-md">
+              {displayName.charAt(0).toUpperCase()}
+            </div>
+          )}
           <div>
             <h3 className="text-2xl font-bold">{displayName}</h3>
             <p className="text-[var(--text-muted)] font-medium">{user?.email}</p>
@@ -129,6 +134,7 @@ export default function ProfilePage({ user, profile, onProfileUpdate }) {
       </div>
 
       <RoutineEditor user={user} profile={profile} onProfileUpdate={onProfileUpdate} />
+      <PhysicalProfile user={user} profile={profile} onProfileUpdate={onProfileUpdate} />
       <PersonalRecords user={user} profile={profile} onProfileUpdate={onProfileUpdate} />
 
       <div className="glass-card p-6 border-red-500/20 bg-red-500/5">
