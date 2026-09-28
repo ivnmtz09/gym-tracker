@@ -9,6 +9,7 @@ export default function Login() {
   const provider = new GoogleAuthProvider();
 
   const [termsAccepted, setTermsAccepted] = useState(false);
+  const [showTerms, setShowTerms] = useState(false);
 
   const handleGoogleLogin = async () => {
     if (!termsAccepted) {
@@ -68,9 +69,29 @@ export default function Login() {
             />
           </div>
           <label htmlFor="terms" className="text-sm font-medium text-foreground/80 ">
-            Acepto los <a href="#" className="text-primary-600 dark:text-primary-400 hover:underline font-bold">Términos y Condiciones</a> y la Política de Privacidad de ForgeFit.
+            Acepto los <button type="button" onClick={() => setShowTerms(true)} className="text-accent hover:underline font-bold">Términos y Condiciones</button> y la Política de Privacidad de ForgeFit.
           </label>
         </div>
+
+        {showTerms && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in">
+            <div className="bg-card w-full max-w-md rounded-3xl p-6 sm:p-8 shadow-2xl border border-border flex flex-col max-h-[80vh]">
+              <h3 className="text-xl font-bold text-foreground mb-4">Términos y Condiciones</h3>
+              <div className="flex-1 overflow-y-auto pr-2 mb-6 custom-scrollbar text-sm text-foreground/80 space-y-4">
+                <p><strong>1. Aceptación de los términos:</strong> Al usar ForgeFit, aceptas estos términos en su totalidad. Si no estás de acuerdo, por favor no uses la aplicación.</p>
+                <p><strong>2. Uso de la aplicación:</strong> ForgeFit es una herramienta para registrar entrenamientos. No proporcionamos consejo médico. Consulta a un profesional de la salud antes de iniciar cualquier programa de ejercicios.</p>
+                <p><strong>3. Privacidad y Datos:</strong> Tus datos de entrenamiento y perfil básico se almacenan de forma segura en Firebase. No vendemos tus datos a terceros.</p>
+                <p><strong>4. Responsabilidad:</strong> El usuario asume todos los riesgos asociados con la actividad física. ForgeFit no se hace responsable de lesiones o daños ocasionados durante el entrenamiento.</p>
+              </div>
+              <button 
+                onClick={() => setShowTerms(false)}
+                className="w-full btn-accent py-3 rounded-xl font-bold transition-transform active:scale-95"
+              >
+                Entendido
+              </button>
+            </div>
+          </div>
+        )}
 
         <button
           onClick={handleGoogleLogin}
