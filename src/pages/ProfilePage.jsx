@@ -4,6 +4,7 @@ import { getAuth, signOut } from 'firebase/auth';
 import { useTheme } from '../contexts/ThemeContext';
 import { saveUserProfile } from '../services/db';
 import RoutineEditor from '../components/RoutineEditor';
+import PersonalRecords from '../components/PersonalRecords';
 
 export default function ProfilePage({ user, profile, onProfileUpdate }) {
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
@@ -128,6 +129,7 @@ export default function ProfilePage({ user, profile, onProfileUpdate }) {
       </div>
 
       <RoutineEditor user={user} profile={profile} onProfileUpdate={onProfileUpdate} />
+      <PersonalRecords user={user} profile={profile} onProfileUpdate={onProfileUpdate} />
 
       <div className="glass-card p-6 border-red-500/20 bg-red-500/5">
         {!showLogoutConfirm ? (

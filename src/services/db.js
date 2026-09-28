@@ -100,16 +100,58 @@ export const saveUserProfile = async (userId, profileData) => {
 
 export const addCheckIn = async (userId, attended, notes, userEmail, time, intensity, currentWeight) => {
   try {
+    const checkInDate = Timestamp.now();
     const docRef = await addDoc(collection(db, CHECKINS_COLLECTION), {
       userId,
       userEmail,
-      date: Timestamp.now(),
+      date: checkInDate,
       attended,
       notes,
       time: time || "",
       intensity: intensity || "normal",
       currentWeight: currentWeight || null
     });
+
+    if (attended) {
+      const profileRef = doc(db, PROFILES_COLLECTION, userId);
+      const profileSnap = await getDoc(profileRef);
+      if (profileSnap.exists()) {
+        let { xp = 0, currentStreak = 0, lastCheckInDate = null } = profileSnap.data();
+        
+        // Calcular XP basado en intensidad
+        const intensityXP = { 'suave': 10, 'normal': 20, 'fuerte': 35, 'extremo': 50 };
+        xp += intensityXP[intensity] || 20;
+
+        // Calcular Racha (Streak)
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        
+        if (lastCheckInDate) {
+          const lastDate = lastCheckInDate.toDate();
+          lastDate.setHours(0, 0, 0, 0);
+          
+          const diffTime = today - lastDate;
+          const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+          
+          if (diffDays === 1) {
+            currentStreak += 1;
+          } else if (diffDays > 1) {
+            currentStreak = 1; // Se rompió la racha
+          }
+          // Si es 0, ya hizo check-in hoy, mantiene la racha
+        } else {
+          currentStreak = 1;
+        }
+
+        await setDoc(profileRef, {
+          xp,
+          currentStreak,
+          lastCheckInDate: checkInDate,
+          ...(currentWeight ? { currentWeight } : {})
+        }, { merge: true });
+      }
+    }
+
     return { success: true, id: docRef.id };
   } catch (error) {
     console.error("Error al guardar check-in: ", error);
@@ -168,6 +210,21 @@ export const getAllCheckIns = async () => {
     }));
   } catch (error) {
     console.error("Error al obtener todos los check-ins: ", error);
+    return [];
+  }
+};
+
+export const getAllRecentCheckIns = async (limitCount = 50) => {
+  try {
+    const q = query(collection(db, CHECKINS_COLLECTION), orderBy("date", "desc"), limit(limitCount));
+    const querySnapshot = await getDocs(q);
+    return querySnapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data(),
+      date: doc.data().date.toDate()
+    }));
+  } catch (error) {
+    console.error("Error al obtener check-ins recientes globales: ", error);
     return [];
   }
 };

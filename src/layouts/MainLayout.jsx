@@ -5,6 +5,8 @@ import { Home, UsersRound, User as UserIcon } from 'lucide-react';
 
 export default function MainLayout({ user, profile }) {
   const displayName = profile?.displayName || user?.email?.split('@')[0];
+  const xp = profile?.xp || 0;
+  const level = Math.floor(Math.sqrt(xp / 50)) + 1;
 
   return (
     <div className="flex flex-col min-h-screen bg-transparent pb-20">
@@ -12,7 +14,7 @@ export default function MainLayout({ user, profile }) {
       <header className="sticky top-0 z-40 bg-[var(--bg-surface)]/80 backdrop-blur-xl border-b border-[var(--border-subtle)] shadow-sm">
         <div className="max-w-3xl mx-auto px-4 h-16 flex justify-between items-center">
           <div className="flex items-center gap-2">
-            <Mascot size={32} />
+            <Mascot size={32} level={level} />
             <h1 className="text-xl font-extrabold tracking-tight">
               Forge<span className="text-[var(--accent-base)]">Fit</span>
             </h1>

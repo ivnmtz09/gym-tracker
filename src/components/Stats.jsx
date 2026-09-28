@@ -3,7 +3,7 @@ import { getAllCheckIns } from '../services/db';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer, CartesianGrid } from 'recharts';
 import { Activity, TrendingUp } from 'lucide-react';
 
-export default function Stats({ user, refreshTrigger }) {
+export default function Stats({ user, profile, refreshTrigger }) {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -56,6 +56,8 @@ export default function Stats({ user, refreshTrigger }) {
   const userKeys = Array.from(new Set(data.flatMap(Object.keys).filter(k => k !== 'date')));
   const colors = ['var(--theme-accent)', '#8b5cf6', '#ec4899', '#10b981'];
 
+  const currentStreak = profile?.currentStreak || 0;
+
   return (
     <div className="flex flex-col h-full">
       <div className="flex justify-between items-center mb-8">
@@ -69,10 +71,10 @@ export default function Stats({ user, refreshTrigger }) {
           </div>
         </div>
         
-        {data.length > 0 && (
-          <div className="hidden sm:flex items-center gap-2 text-sm font-semibold text-accent bg-accent/10 px-3 py-1.5 rounded-lg border border-accent/20">
+        {currentStreak > 0 && (
+          <div className="hidden sm:flex items-center gap-2 text-sm font-semibold text-orange-500 bg-orange-500/10 px-3 py-1.5 rounded-lg border border-orange-500/20">
             <TrendingUp size={16} />
-            <span>En racha</span>
+            <span>Racha activa: {currentStreak} {currentStreak === 1 ? 'Día' : 'Días'}</span>
           </div>
         )}
       </div>

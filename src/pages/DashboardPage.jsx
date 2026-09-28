@@ -53,16 +53,50 @@ export default function DashboardPage({ user, profile }) {
   const displayName = profile?.displayName || user?.email?.split('@')[0];
   const capitalizedName = displayName?.charAt(0).toUpperCase() + displayName?.slice(1);
 
+  const xp = profile?.xp || 0;
+  const currentStreak = profile?.currentStreak || 0;
+  const level = Math.floor(Math.sqrt(xp / 50)) + 1;
+  const xpForNextLevel = 50 * Math.pow(level, 2);
+  const xpForCurrentLevel = 50 * Math.pow(level - 1, 2);
+  const progressPercent = ((xp - xpForCurrentLevel) / (xpForNextLevel - xpForCurrentLevel)) * 100;
+
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <header className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+      <header className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-foreground tracking-tight">
-            Hola, <span className="text-accent">{capitalizedName}</span>
-          </h2>
-          <p className="text-foreground/70 mt-2 text-lg font-medium">
-            Programa: <strong className="text-foreground">{programName}</strong>
-          </p>
+          <div className="flex items-center gap-3">
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-foreground tracking-tight">
+              Hola, <span className="text-accent">{capitalizedName}</span>
+            </h2>
+            <div className="bg-accent/20 border border-accent/30 text-accent px-3 py-1 rounded-full text-sm font-black shadow-sm">
+              Nivel {level}
+            </div>
+          </div>
+          
+          <div className="mt-3 flex items-center gap-4">
+            <p className="text-foreground/70 text-lg font-medium">
+              Programa: <strong className="text-foreground">{programName}</strong>
+            </p>
+            {currentStreak > 0 && (
+              <div className="flex items-center gap-1.5 bg-orange-500/10 text-orange-500 px-3 py-1 rounded-lg border border-orange-500/20 font-bold text-sm shadow-sm">
+                <Flame size={16} className={currentStreak >= 3 ? "animate-pulse" : ""} />
+                {currentStreak} {currentStreak === 1 ? 'Día' : 'Días'}
+              </div>
+            )}
+          </div>
+
+          <div className="mt-4 max-w-xs">
+            <div className="flex justify-between text-xs font-bold text-foreground/50 mb-1">
+              <span>XP: {xp}</span>
+              <span>Próximo Nivel: {xpForNextLevel}</span>
+            </div>
+            <div className="h-2 w-full bg-foreground/10 rounded-full overflow-hidden">
+              <div 
+                className="h-full bg-accent transition-all duration-1000 ease-out shadow-[0_0_10px_var(--accent-glow)]"
+                style={{ width: `${Math.min(100, Math.max(0, progressPercent))}%` }}
+              />
+            </div>
+          </div>
         </div>
         
         {profile?.initialImc && (
@@ -213,7 +247,7 @@ export default function DashboardPage({ user, profile }) {
               </div>
 
               <div className="flex-1 relative">
-                {activeTab === 'stats' && <Stats user={user} refreshTrigger={refreshStats} />}
+                {activeTab === 'stats' && <Stats user={user} profile={profile} refreshTrigger={refreshStats} />}
                 {activeTab === 'calendar' && <CalendarView checkIns={allCheckIns} />}
               </div>
             </div>

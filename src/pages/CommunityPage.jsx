@@ -203,27 +203,47 @@ export default function CommunityPage({ user, profile, onProfileUpdate }) {
         </div>
 
         <div className="bg-foreground/5 p-6 sm:p-8 rounded-3xl border border-border shadow-sm flex flex-col">
-          <h3 className="text-xl font-bold text-foreground mb-6">Actividad Reciente</h3>
-          <div className="space-y-4 flex-1">
-            {groupCheckIns.slice().reverse().filter(ci => ci.attended).slice(0, 5).map(ci => (
-              <div key={ci.id} className="flex items-center justify-between bg-card p-4 rounded-2xl border border-border">
-                <div>
-                  <p className="font-bold text-foreground">
-                    {groupData.memberNames[ci.userId] || 'Usuario'}
-                  </p>
-                  <p className="text-sm font-medium text-foreground/60 capitalize mt-0.5">
-                    {ci.date.toLocaleDateString('es-ES', { weekday: 'short', day: 'numeric', month: 'short' })} • <span className="text-accent">{ci.intensity || 'Normal'}</span>
-                  </p>
+          <h3 className="text-xl font-bold text-foreground mb-6">Muro de Actividad</h3>
+          <div className="space-y-4 flex-1 max-h-[600px] overflow-y-auto pr-2 custom-scrollbar">
+            {groupCheckIns.slice().reverse().filter(ci => ci.attended).slice(0, 15).map(ci => {
+              const uName = groupData.memberNames[ci.userId] || 'Usuario';
+              return (
+                <div key={ci.id} className="bg-card p-5 rounded-2xl border border-border space-y-3 shadow-sm hover:shadow-md transition-shadow">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full btn-accent flex items-center justify-center font-bold text-lg shadow-inner">
+                        {uName[0].toUpperCase()}
+                      </div>
+                      <div>
+                        <p className="font-bold text-foreground">
+                          {uName}
+                        </p>
+                        <p className="text-xs font-medium text-foreground/60 mt-0.5">
+                          {ci.date.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })} a las {ci.time || '12:00'}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="px-3 py-1 bg-accent/10 text-accent text-xs font-bold rounded-full border border-accent/20">
+                      {ci.intensity || 'Normal'}
+                    </div>
+                  </div>
+                  {ci.notes && (
+                    <p className="text-sm text-foreground/80 bg-background/50 p-3 rounded-xl border border-border italic">
+                      "{ci.notes}"
+                    </p>
+                  )}
+                  <div className="flex justify-end pt-1">
+                    <button className="text-xs font-bold text-foreground/50 flex items-center gap-1.5 hover:text-accent transition-colors">
+                      🔥 Dar Ánimos
+                    </button>
+                  </div>
                 </div>
-                <div className="w-10 h-10 rounded-full bg-accent/20 flex items-center justify-center shadow-inner">
-                  <Check size={18} className="text-accent" />
-                </div>
-              </div>
-            ))}
+              );
+            })}
             {groupCheckIns.length === 0 && (
               <div className="flex flex-col items-center justify-center h-full text-center py-10 opacity-50">
                 <UsersRound size={48} className="mb-4 text-foreground/50" />
-                <p className="text-lg font-medium text-foreground/60">Sin actividad reciente.</p>
+                <p className="text-lg font-medium text-foreground/60">Aún no hay check-ins en el grupo.</p>
               </div>
             )}
           </div>
